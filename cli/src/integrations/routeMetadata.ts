@@ -322,13 +322,13 @@ function hasNoExplicitNonOpenAICompatibleProvider(
   processEnv: NodeJS.ProcessEnv,
 ): boolean {
   return (
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_OPENAI) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_MISTRAL) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_BEDROCK) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_VERTEX) &&
-    !isEnvTruthy(processEnv.CLAUDE_CODE_USE_FOUNDRY)
+    !isEnvTruthy(processEnv.QUANTUM_USE_OPENAI) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_GITHUB) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_GEMINI) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_MISTRAL) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_BEDROCK) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_VERTEX) &&
+    !isEnvTruthy(processEnv.QUANTUM_USE_FOUNDRY)
   )
 }
 
@@ -588,29 +588,29 @@ export function resolveActiveRouteIdFromEnv(
     activeProfileProvider?: string
   },
 ): string | null {
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GEMINI)) {
     return 'gemini'
   }
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_MISTRAL)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_MISTRAL)) {
     return 'mistral'
   }
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GITHUB)) {
     return 'github'
   }
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_BEDROCK)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_BEDROCK)) {
     return 'bedrock'
   }
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_VERTEX)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_VERTEX)) {
     return 'vertex'
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_OPENAI)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_OPENAI)) {
     const baseUrl =
       processEnv.OPENAI_BASE_URL ?? processEnv.OPENAI_API_BASE
     const matchedRoute = resolveRouteIdFromBaseUrl(baseUrl)
 
     if (
-      processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED === '1' &&
+      processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED === '1' &&
       options?.activeProfileProvider
     ) {
       const route = resolveProfileRoute(options.activeProfileProvider)

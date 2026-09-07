@@ -13,13 +13,13 @@ async function importFreshModelOptionsModule() {
 }
 
 const originalEnv = {
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_USE_GEMINI: process.env.CLAUDE_CODE_USE_GEMINI,
-  CLAUDE_CODE_USE_GITHUB: process.env.CLAUDE_CODE_USE_GITHUB,
-  CLAUDE_CODE_USE_MISTRAL: process.env.CLAUDE_CODE_USE_MISTRAL,
-  CLAUDE_CODE_USE_BEDROCK: process.env.CLAUDE_CODE_USE_BEDROCK,
-  CLAUDE_CODE_USE_VERTEX: process.env.CLAUDE_CODE_USE_VERTEX,
-  CLAUDE_CODE_USE_FOUNDRY: process.env.CLAUDE_CODE_USE_FOUNDRY,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
+  QUANTUM_USE_GEMINI: process.env.QUANTUM_USE_GEMINI,
+  QUANTUM_USE_GITHUB: process.env.QUANTUM_USE_GITHUB,
+  QUANTUM_USE_MISTRAL: process.env.QUANTUM_USE_MISTRAL,
+  QUANTUM_USE_BEDROCK: process.env.QUANTUM_USE_BEDROCK,
+  QUANTUM_USE_VERTEX: process.env.QUANTUM_USE_VERTEX,
+  QUANTUM_USE_FOUNDRY: process.env.QUANTUM_USE_FOUNDRY,
   OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
   OPENAI_MODEL: process.env.OPENAI_MODEL,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
@@ -62,7 +62,7 @@ afterEach(() => {
 })
 
 test('Xiaomi MiMo provider exposes MiMo catalog models in /model options', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2.5-pro'
   process.env.MIMO_API_KEY = 'mimo-live-key'

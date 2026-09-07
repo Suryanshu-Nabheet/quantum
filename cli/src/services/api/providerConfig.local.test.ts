@@ -9,7 +9,7 @@ import {
 } from './providerConfig.js'
 
 const originalEnv = {
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
   OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   OPENAI_AUTH_HEADER: process.env.OPENAI_AUTH_HEADER,
@@ -29,7 +29,7 @@ function restoreEnv(key: string, value: string | undefined): void {
 }
 
 afterEach(() => {
-  restoreEnv('CLAUDE_CODE_USE_OPENAI', originalEnv.CLAUDE_CODE_USE_OPENAI)
+  restoreEnv('QUANTUM_USE_OPENAI', originalEnv.QUANTUM_USE_OPENAI)
   restoreEnv('OPENAI_BASE_URL', originalEnv.OPENAI_BASE_URL)
   restoreEnv('OPENAI_API_KEY', originalEnv.OPENAI_API_KEY)
   restoreEnv('OPENAI_AUTH_HEADER', originalEnv.OPENAI_AUTH_HEADER)
@@ -73,7 +73,7 @@ test('treats public hosts as remote', () => {
 })
 
 test('creates a cache scope for local openai-compatible providers', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'http://localhost:1234/v1'
   process.env.OPENAI_MODEL = 'llama-3.2-3b-instruct'
 
@@ -83,7 +83,7 @@ test('creates a cache scope for local openai-compatible providers', () => {
 })
 
 test('keeps codex alias models on chat completions for local openai-compatible providers', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'http://127.0.0.1:8080/v1'
   process.env.OPENAI_MODEL = 'gpt-5.4'
 
@@ -99,7 +99,7 @@ test('keeps codex alias models on chat completions for local openai-compatible p
 })
 
 test('partitions local openai-compatible model cache scope by credentials and headers', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'http://localhost:1234/v1'
   process.env.OPENAI_MODEL = 'llama-3.2-3b-instruct'
   process.env.OPENAI_API_KEY = 'first-key'
@@ -120,7 +120,7 @@ test('partitions local openai-compatible model cache scope by credentials and he
 })
 
 test('uses responses transport when OpenAI-compatible API format requests responses', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1'
   process.env.OPENAI_MODEL = 'gpt-5.4'
   process.env.OPENAI_API_FORMAT = 'responses'
@@ -134,7 +134,7 @@ test('uses responses transport when OpenAI-compatible API format requests respon
 })
 
 test('uses responses transport for Hicap gpt models when requested', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.hicap.ai/v1'
   process.env.OPENAI_MODEL = 'gpt-5.4'
   process.env.OPENAI_API_FORMAT = 'responses'
@@ -148,7 +148,7 @@ test('uses responses transport for Hicap gpt models when requested', () => {
 })
 
 test('falls back to chat completions for non-gpt Hicap models when responses is requested', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.hicap.ai/v1'
   process.env.OPENAI_MODEL = 'claude-opus-4.7'
   process.env.OPENAI_API_FORMAT = 'responses'
@@ -162,7 +162,7 @@ test('falls back to chat completions for non-gpt Hicap models when responses is 
 })
 
 test('keeps Codex backend on Codex responses transport even when API format is set', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://chatgpt.com/backend-api/codex'
   process.env.OPENAI_MODEL = 'codexplan'
   process.env.OPENAI_API_FORMAT = 'chat_completions'
@@ -176,7 +176,7 @@ test('keeps Codex backend on Codex responses transport even when API format is s
 })
 
 test('skips local model cache scope for remote openai-compatible providers', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1'
   process.env.OPENAI_MODEL = 'gpt-4o'
 

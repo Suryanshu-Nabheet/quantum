@@ -35,22 +35,22 @@ export async function withTempDir<T>(
   })
 
   const dir = createTempDir(prefix)
-  const previousConfigDir = process.env.CLAUDE_CONFIG_DIR
-  const previousSimpleMode = process.env.CLAUDE_CODE_SIMPLE
-  process.env.CLAUDE_CONFIG_DIR = dir
-  process.env.CLAUDE_CODE_SIMPLE = '1'
+  const previousConfigDir = process.env.QUANTUM_CONFIG_DIR
+  const previousSimpleMode = process.env.QUANTUM_SIMPLE
+  process.env.QUANTUM_CONFIG_DIR = dir
+  process.env.QUANTUM_SIMPLE = '1'
   try {
     return await fn(dir)
   } finally {
     if (previousConfigDir === undefined) {
-      delete process.env.CLAUDE_CONFIG_DIR
+      delete process.env.QUANTUM_CONFIG_DIR
     } else {
-      process.env.CLAUDE_CONFIG_DIR = previousConfigDir
+      process.env.QUANTUM_CONFIG_DIR = previousConfigDir
     }
     if (previousSimpleMode === undefined) {
-      delete process.env.CLAUDE_CODE_SIMPLE
+      delete process.env.QUANTUM_SIMPLE
     } else {
-      process.env.CLAUDE_CODE_SIMPLE = previousSimpleMode
+      process.env.QUANTUM_SIMPLE = previousSimpleMode
     }
     rmSync(dir, { recursive: true, force: true })
     tempDirLockPromise = null

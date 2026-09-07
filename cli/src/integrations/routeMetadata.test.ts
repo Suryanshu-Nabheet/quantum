@@ -157,8 +157,8 @@ test.each([
     expect(
       resolveActiveRouteIdFromEnv(
         {
-          CLAUDE_CODE_USE_OPENAI: '1',
-          CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED: '1',
+          QUANTUM_USE_OPENAI: '1',
+          QUANTUM_PROVIDER_PROFILE_ENV_APPLIED: '1',
           OPENAI_BASE_URL: baseUrl,
           OPENAI_MODEL: model,
         },

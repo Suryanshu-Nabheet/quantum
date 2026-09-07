@@ -14,13 +14,11 @@ import type {
   BuiltInAgentDefinition,
 } from '../loadAgentsDir.js'
 
-const CLAUDE_CODE_DOCS_MAP_URL =
+const QUANTUM_DOCS_MAP_URL =
   'https://github.com/Suryanshu-Nabheet/Quantum/blob/main/cli/README.md'
-const CDP_DOCS_MAP_URL = 'https://platform.claude.com/llms.txt'
+const CDP_DOCS_MAP_URL = 'https://docs.anthropic.com/llms.txt'
 
 export const QUANTUM_GUIDE_AGENT_TYPE = 'quantum-guide'
-/** @deprecated Legacy agent type for saved sessions */
-export const CLAUDE_CODE_GUIDE_AGENT_TYPE = QUANTUM_GUIDE_AGENT_TYPE
 
 function getQuantumGuideBasePrompt(): string {
   // Ant-native builds alias find/grep to embedded bfs/ugrep and remove the
@@ -41,7 +39,7 @@ function getQuantumGuideBasePrompt(): string {
 
 **Documentation sources:**
 
-- **Quantum docs** (${CLAUDE_CODE_DOCS_MAP_URL}): Use these as the compatibility reference for questions about the Quantum CLI tool, including:
+- **Quantum docs** (${QUANTUM_DOCS_MAP_URL}): Use these as the compatibility reference for questions about the Quantum CLI tool, including:
   - Installation, setup, and getting started
   - Hooks (pre/post command execution)
   - Custom skills
@@ -200,6 +198,3 @@ When answering questions, consider these configured features and proactively sug
     return basePromptWithFeedback
   },
 }
-
-/** @deprecated Use QUANTUM_GUIDE_AGENT */
-export const CLAUDE_CODE_GUIDE_AGENT = QUANTUM_GUIDE_AGENT

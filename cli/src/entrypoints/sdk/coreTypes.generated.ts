@@ -1538,7 +1538,7 @@ export type AgentDefinition = {
   permissionMode?: "default" | "acceptEdits" | "bypassPermissions" | "plan" | "dontAsk"
 }
 
-/** Source for loading filesystem-based settings. 'user' - Global user settings (~/.claude/settings.json). 'project' - Project settings (.claude/settings.json). 'local' - Local settings (.claude/settings.local.json). */
+/** Source for loading filesystem-based settings. 'user' - Global user settings (~/.quantum/settings.json). 'project' - Project settings (.claude/settings.json). 'local' - Local settings (.claude/settings.local.json). */
 export type SettingSource = "user" | "project" | "local"
 
 /** Configuration for loading a plugin. */
@@ -1585,7 +1585,7 @@ export type SDKUserMessageReplay = {
   isReplay: true
 }
 
-/** Rate limit information for claude.ai subscription users. */
+/** Rate limit information for provider authentication users. */
 export type SDKRateLimitInfo = {
   status: "allowed" | "allowed_warning" | "rejected"
   resetsAt?: number

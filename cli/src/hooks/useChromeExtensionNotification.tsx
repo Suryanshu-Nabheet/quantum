@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text } from '../ink.js';
-import { isClaudeAISubscriber } from '../utils/auth.js';
+import { isQuantumSubscriber } from '../utils/auth.js';
 import { isChromeExtensionInstalled, shouldEnableClaudeInChrome } from '../utils/browserExtension/setup.js';
 import { isRunningOnHomespace } from '../utils/envUtils.js';
 import { useStartupNotification } from './notifs/useStartupNotification.js';
@@ -21,10 +21,10 @@ async function _temp() {
   if (!shouldEnableClaudeInChrome(chromeFlag)) {
     return null;
   }
-  if (true && !isClaudeAISubscriber()) {
+  if (true && !isQuantumSubscriber()) {
     return {
       key: "chrome-requires-subscription",
-      jsx: <Text color="error">Quantum browser extension requires a claude.ai subscription</Text>,
+      jsx: <Text color="error">Quantum browser extension requires provider authentication</Text>,
       priority: "immediate",
       timeoutMs: 5000
     };
@@ -33,7 +33,7 @@ async function _temp() {
   if (!installed && !isRunningOnHomespace()) {
     return {
       key: "chrome-extension-not-detected",
-      jsx: <Text color="warning">Chrome extension not detected · https://claude.ai/chrome to install</Text>,
+      jsx: <Text color="warning">Chrome extension not detected · https://github.com/Suryanshu-Nabheet/Quantum to install</Text>,
       priority: "immediate",
       timeoutMs: 3000
     };

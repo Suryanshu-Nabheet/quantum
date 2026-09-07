@@ -1,6 +1,6 @@
 /**
  * Keybindings template generator.
- * Generates a well-documented template file for ~/.claude/keybindings.json
+ * Generates a well-documented template file for ~/.quantum/keybindings.json
  */
 
 import { jsonStringify } from '../utils/slowOperations.js'
@@ -43,7 +43,7 @@ export function generateKeybindingsTemplate(): string {
 
   // Format as object wrapper with bindings array
   const config = {
-    $schema: 'https://www.schemastore.org/claude-code-keybindings.json',
+    $schema: 'https://www.schemastore.org/quantum-keybindings.json',
     $docs: 'https://github.com/Suryanshu-Nabheet/Quantum/blob/main/cli/README.md',
     bindings,
   }

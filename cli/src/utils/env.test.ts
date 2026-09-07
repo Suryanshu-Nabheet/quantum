@@ -4,8 +4,8 @@ import { tmpdir } from 'os'
 import { join } from 'path'
 
 const originalEnv = {
-  CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR,
-  CLAUDE_CODE_CUSTOM_OAUTH_URL: process.env.CLAUDE_CODE_CUSTOM_OAUTH_URL,
+  QUANTUM_CONFIG_DIR: process.env.QUANTUM_CONFIG_DIR,
+  QUANTUM_CUSTOM_OAUTH_URL: process.env.QUANTUM_CUSTOM_OAUTH_URL,
   USER_TYPE: process.env.USER_TYPE,
 }
 
@@ -13,22 +13,22 @@ let tempDir: string
 
 beforeEach(() => {
   tempDir = mkdtempSync(join(tmpdir(), 'quantum-env-test-'))
-  process.env.CLAUDE_CONFIG_DIR = tempDir
-  delete process.env.CLAUDE_CODE_CUSTOM_OAUTH_URL
+  process.env.QUANTUM_CONFIG_DIR = tempDir
+  delete process.env.QUANTUM_CUSTOM_OAUTH_URL
   delete process.env.USER_TYPE
 })
 
 afterEach(() => {
   rmSync(tempDir, { recursive: true, force: true })
-  if (originalEnv.CLAUDE_CONFIG_DIR === undefined) {
-    delete process.env.CLAUDE_CONFIG_DIR
+  if (originalEnv.QUANTUM_CONFIG_DIR === undefined) {
+    delete process.env.QUANTUM_CONFIG_DIR
   } else {
-    process.env.CLAUDE_CONFIG_DIR = originalEnv.CLAUDE_CONFIG_DIR
+    process.env.QUANTUM_CONFIG_DIR = originalEnv.QUANTUM_CONFIG_DIR
   }
-  if (originalEnv.CLAUDE_CODE_CUSTOM_OAUTH_URL === undefined) {
-    delete process.env.CLAUDE_CODE_CUSTOM_OAUTH_URL
+  if (originalEnv.QUANTUM_CUSTOM_OAUTH_URL === undefined) {
+    delete process.env.QUANTUM_CUSTOM_OAUTH_URL
   } else {
-    process.env.CLAUDE_CODE_CUSTOM_OAUTH_URL = originalEnv.CLAUDE_CODE_CUSTOM_OAUTH_URL
+    process.env.QUANTUM_CUSTOM_OAUTH_URL = originalEnv.QUANTUM_CUSTOM_OAUTH_URL
   }
   if (originalEnv.USER_TYPE === undefined) {
     delete process.env.USER_TYPE

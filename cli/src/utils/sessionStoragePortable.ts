@@ -9,7 +9,7 @@
 import type { UUID } from 'crypto'
 import { open as fsOpen, readdir, realpath, stat } from 'fs/promises'
 import { join } from 'path'
-import { getClaudeConfigHomeDir, getProjectsDir } from './envUtils.js'
+import { getQuantumConfigHomeDir, getProjectsDir } from './envUtils.js'
 import { getWorktreePathsPortable } from './getWorktreePathsPortable.js'
 import { djb2Hash } from './hash.js'
 
@@ -383,7 +383,7 @@ export async function findProjectDir(
  * to sibling git worktrees. `projectPath` in the result is the canonical
  * user-facing directory the file was found under.
  *
- * When `dir` is omitted: scan all project directories under ~/.claude/projects/.
+ * When `dir` is omitted: scan all project directories under ~/.quantum/projects/.
  * `projectPath` is undefined in this case (no meaningful project path to report).
  *
  * Existence is checked by stat (operate-then-catch-ENOENT, no existsSync).

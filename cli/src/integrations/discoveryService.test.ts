@@ -6,20 +6,20 @@ import { registerGateway } from './index.js'
 
 const originalFetch = globalThis.fetch
 const originalEnv = {
-  CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR,
+  QUANTUM_CONFIG_DIR: process.env.QUANTUM_CONFIG_DIR,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
   OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
   OPENAI_API_BASE: process.env.OPENAI_API_BASE,
   OPENAI_MODEL: process.env.OPENAI_MODEL,
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_USE_GEMINI: process.env.CLAUDE_CODE_USE_GEMINI,
-  CLAUDE_CODE_USE_MISTRAL: process.env.CLAUDE_CODE_USE_MISTRAL,
-  CLAUDE_CODE_USE_GITHUB: process.env.CLAUDE_CODE_USE_GITHUB,
-  CLAUDE_CODE_USE_BEDROCK: process.env.CLAUDE_CODE_USE_BEDROCK,
-  CLAUDE_CODE_USE_VERTEX: process.env.CLAUDE_CODE_USE_VERTEX,
-  CLAUDE_CODE_USE_FOUNDRY: process.env.CLAUDE_CODE_USE_FOUNDRY,
-  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC:
-    process.env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
+  QUANTUM_USE_GEMINI: process.env.QUANTUM_USE_GEMINI,
+  QUANTUM_USE_MISTRAL: process.env.QUANTUM_USE_MISTRAL,
+  QUANTUM_USE_GITHUB: process.env.QUANTUM_USE_GITHUB,
+  QUANTUM_USE_BEDROCK: process.env.QUANTUM_USE_BEDROCK,
+  QUANTUM_USE_VERTEX: process.env.QUANTUM_USE_VERTEX,
+  QUANTUM_USE_FOUNDRY: process.env.QUANTUM_USE_FOUNDRY,
+  QUANTUM_DISABLE_NONESSENTIAL_TRAFFIC:
+    process.env.QUANTUM_DISABLE_NONESSENTIAL_TRAFFIC,
 }
 
 let tempDir: string
@@ -49,19 +49,19 @@ function clearProviderEnv(): void {
   delete process.env.OPENAI_BASE_URL
   delete process.env.OPENAI_API_BASE
   delete process.env.OPENAI_MODEL
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_USE_GEMINI
-  delete process.env.CLAUDE_CODE_USE_MISTRAL
-  delete process.env.CLAUDE_CODE_USE_GITHUB
-  delete process.env.CLAUDE_CODE_USE_BEDROCK
-  delete process.env.CLAUDE_CODE_USE_VERTEX
-  delete process.env.CLAUDE_CODE_USE_FOUNDRY
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_USE_GEMINI
+  delete process.env.QUANTUM_USE_MISTRAL
+  delete process.env.QUANTUM_USE_GITHUB
+  delete process.env.QUANTUM_USE_BEDROCK
+  delete process.env.QUANTUM_USE_VERTEX
+  delete process.env.QUANTUM_USE_FOUNDRY
 }
 
 beforeEach(() => {
   mock.restore()
   tempDir = mkdtempSync(join(tmpdir(), 'quantum-discovery-service-test-'))
-  process.env.CLAUDE_CONFIG_DIR = tempDir
+  process.env.QUANTUM_CONFIG_DIR = tempDir
   delete process.env.OPENROUTER_API_KEY
   clearProviderEnv()
   globalThis.fetch = originalFetch
@@ -71,19 +71,19 @@ afterEach(() => {
   mock.restore()
   globalThis.fetch = originalFetch
   rmSync(tempDir, { recursive: true, force: true })
-  restoreEnvValue('CLAUDE_CONFIG_DIR')
+  restoreEnvValue('QUANTUM_CONFIG_DIR')
   restoreEnvValue('OPENROUTER_API_KEY')
   restoreEnvValue('OPENAI_BASE_URL')
   restoreEnvValue('OPENAI_API_BASE')
   restoreEnvValue('OPENAI_MODEL')
-  restoreEnvValue('CLAUDE_CODE_USE_OPENAI')
-  restoreEnvValue('CLAUDE_CODE_USE_GEMINI')
-  restoreEnvValue('CLAUDE_CODE_USE_MISTRAL')
-  restoreEnvValue('CLAUDE_CODE_USE_GITHUB')
-  restoreEnvValue('CLAUDE_CODE_USE_BEDROCK')
-  restoreEnvValue('CLAUDE_CODE_USE_VERTEX')
-  restoreEnvValue('CLAUDE_CODE_USE_FOUNDRY')
-  restoreEnvValue('CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC')
+  restoreEnvValue('QUANTUM_USE_OPENAI')
+  restoreEnvValue('QUANTUM_USE_GEMINI')
+  restoreEnvValue('QUANTUM_USE_MISTRAL')
+  restoreEnvValue('QUANTUM_USE_GITHUB')
+  restoreEnvValue('QUANTUM_USE_BEDROCK')
+  restoreEnvValue('QUANTUM_USE_VERTEX')
+  restoreEnvValue('QUANTUM_USE_FOUNDRY')
+  restoreEnvValue('QUANTUM_DISABLE_NONESSENTIAL_TRAFFIC')
 })
 
 describe('discoverModelsForRoute', () => {
@@ -340,7 +340,7 @@ describe('discoverModelsForRoute', () => {
   })
 
   test('skips descriptor network discovery when nonessential traffic is disabled', async () => {
-    process.env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = '1'
+    process.env.QUANTUM_DISABLE_NONESSENTIAL_TRAFFIC = '1'
     process.env.OPENROUTER_API_KEY = 'or-key'
     const { discoverModelsForRoute } = await loadDiscoveryServiceModule()
 
@@ -393,7 +393,7 @@ describe('discoverModelsForRoute', () => {
       await loadDiscoveryServiceModule()
 
     const startupEnv: NodeJS.ProcessEnv = {
-      CLAUDE_CODE_USE_OPENAI: '1',
+      QUANTUM_USE_OPENAI: '1',
       OPENAI_BASE_URL: 'http://127.0.0.1:1234/v1',
     }
 

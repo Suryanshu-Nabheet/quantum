@@ -68,7 +68,7 @@ export function SpinnerWithVerb(props: Props): React.ReactNode {
   // Hoisted to mount-time — this component re-renders at animation framerate.
   const briefEnvEnabled = false || false ?
   // biome-ignore lint/correctness/useHookAtTopLevel: feature() is a compile-time constant
-  useMemo(() => isEnvTruthy(process.env.CLAUDE_CODE_BRIEF), []) : false;
+  useMemo(() => isEnvTruthy(process.env.QUANTUM_BRIEF), []) : false;
 
   // Runtime gate mirrors isBriefEnabled() but inlined — importing from
   // BriefTool.ts would leak tool-name strings into external builds. Single

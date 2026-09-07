@@ -14,10 +14,10 @@ import { join } from 'path'
 import { getFsImplementation } from './fsOperations.js'
 
 describe('KnowledgeGraph Phase 1 Stress & Edge Cases', () => {
-  const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
+  const originalConfigDir = process.env.QUANTUM_CONFIG_DIR
   const originalOrama = process.env.QUANTUM_KNOWLEDGE_ORAMA
   const configDir = mkdtempSync(join(tmpdir(), 'quantum-stress-'))
-  process.env.CLAUDE_CONFIG_DIR = configDir
+  process.env.QUANTUM_CONFIG_DIR = configDir
   const cwd = getFsImplementation().cwd()
 
   beforeEach(() => {
@@ -31,9 +31,9 @@ describe('KnowledgeGraph Phase 1 Stress & Edge Cases', () => {
     
     // Restore config dir
     if (originalConfigDir === undefined) {
-      delete process.env.CLAUDE_CONFIG_DIR
+      delete process.env.QUANTUM_CONFIG_DIR
     } else {
-      process.env.CLAUDE_CONFIG_DIR = originalConfigDir
+      process.env.QUANTUM_CONFIG_DIR = originalConfigDir
     }
     
     // Restore Orama flag

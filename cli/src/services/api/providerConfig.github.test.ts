@@ -7,8 +7,8 @@ import {
 } from './providerConfig.js'
 
 const ENV_KEYS = [
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_OPENAI',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_OPENAI',
   'OPENAI_MODEL',
   'OPENAI_BASE_URL',
   'OPENAI_API_BASE',
@@ -48,29 +48,29 @@ test.each([
   expect(normalizeGithubModelsApiModel(input)).toBe(expected)
 })
 
-test('resolveProviderRequest applies GitHub normalization when CLAUDE_CODE_USE_GITHUB=1', () => {
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+test('resolveProviderRequest applies GitHub normalization when QUANTUM_USE_GITHUB=1', () => {
+  process.env.QUANTUM_USE_GITHUB = '1'
   const r = resolveProviderRequest({ model: 'github:gpt-4o' })
   expect(r.resolvedModel).toBe('gpt-4o')
   expect(r.transport).toBe('chat_completions')
 })
 
 test('resolveProviderRequest routes GitHub GPT-5 codex models to responses transport', () => {
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   const r = resolveProviderRequest({ model: 'gpt-5.3-codex' })
   expect(r.resolvedModel).toBe('gpt-5.3-codex')
   expect(r.transport).toBe('codex_responses')
 })
 
 test('resolveProviderRequest keeps gpt-5-mini on chat_completions for GitHub', () => {
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   const r = resolveProviderRequest({ model: 'gpt-5-mini' })
   expect(r.resolvedModel).toBe('gpt-5-mini')
   expect(r.transport).toBe('chat_completions')
 })
 
 test('resolveProviderRequest leaves model unchanged without GitHub flag', () => {
-  delete process.env.CLAUDE_CODE_USE_GITHUB
+  delete process.env.QUANTUM_USE_GITHUB
   const r = resolveProviderRequest({ model: 'github:gpt-4o' })
   expect(r.resolvedModel).toBe('github:gpt-4o')
 })

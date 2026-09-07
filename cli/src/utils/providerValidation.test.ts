@@ -7,18 +7,18 @@ import {
 } from './providerValidation.js'
 
 const ENV_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
+  'QUANTUM_USE_OPENAI',
   'OPENAI_API_KEY',
   'OPENAI_BASE_URL',
   'OPENAI_MODEL',
   'CODEX_API_KEY',
   'CHATGPT_ACCOUNT_ID',
   'CODEX_ACCOUNT_ID',
-  'CLAUDE_CODE_USE_GITHUB',
+  'QUANTUM_USE_GITHUB',
   'GITHUB_TOKEN',
   'GH_TOKEN',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_MISTRAL',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_MISTRAL',
   'MISTRAL_API_KEY',
   'MINIMAX_API_KEY',
   'NVIDIA_API_KEY',
@@ -59,7 +59,7 @@ afterEach(() => {
 })
 
 test('accepts GEMINI_ACCESS_TOKEN as valid Gemini auth', async () => {
-  process.env.CLAUDE_CODE_USE_GEMINI = '1'
+  process.env.QUANTUM_USE_GEMINI = '1'
   process.env.GEMINI_AUTH_MODE = 'access-token'
   delete process.env.GEMINI_API_KEY
   delete process.env.GOOGLE_API_KEY
@@ -69,7 +69,7 @@ test('accepts GEMINI_ACCESS_TOKEN as valid Gemini auth', async () => {
 })
 
 test('accepts ADC credentials for Gemini auth', async () => {
-  process.env.CLAUDE_CODE_USE_GEMINI = '1'
+  process.env.QUANTUM_USE_GEMINI = '1'
   process.env.GEMINI_AUTH_MODE = 'adc'
   delete process.env.GEMINI_API_KEY
   delete process.env.GOOGLE_API_KEY
@@ -87,7 +87,7 @@ test('accepts ADC credentials for Gemini auth', async () => {
 })
 
 test('still errors when no Gemini credential source is available', async () => {
-  process.env.CLAUDE_CODE_USE_GEMINI = '1'
+  process.env.QUANTUM_USE_GEMINI = '1'
   process.env.GEMINI_AUTH_MODE = 'access-token'
   delete process.env.GEMINI_API_KEY
   delete process.env.GOOGLE_API_KEY
@@ -95,16 +95,16 @@ test('still errors when no Gemini credential source is available', async () => {
   delete process.env.GOOGLE_APPLICATION_CREDENTIALS
 
   await expect(getProviderValidationError(process.env)).resolves.toBe(
-    'GEMINI_API_KEY, GOOGLE_API_KEY, GEMINI_ACCESS_TOKEN, or Google ADC credentials are required when CLAUDE_CODE_USE_GEMINI=1.',
+    'GEMINI_API_KEY, GOOGLE_API_KEY, GEMINI_ACCESS_TOKEN, or Google ADC credentials are required when QUANTUM_USE_GEMINI=1.',
   )
 })
 
 test('openai missing key error includes recovery guidance and config locations', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1'
   delete process.env.OPENAI_API_KEY
   delete process.env.OPENAI_MODEL
-  delete process.env.CLAUDE_CODE_USE_GITHUB
+  delete process.env.QUANTUM_USE_GITHUB
   delete process.env.CODEX_API_KEY
   delete process.env.CHATGPT_ACCOUNT_ID
   delete process.env.CODEX_ACCOUNT_ID
@@ -112,36 +112,36 @@ test('openai missing key error includes recovery guidance and config locations',
   const message = await getProviderValidationError(process.env)
   expect(message).not.toBeNull()
   expect(message!).toContain(
-    'OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
+    'OPENAI_API_KEY is required when QUANTUM_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
   )
   expect(message!).toContain(
-    'set CLAUDE_CODE_USE_OPENAI=0 in your shell environment',
+    'set QUANTUM_USE_OPENAI=0 in your shell environment',
   )
   expect(message!).toContain('Saved startup settings can come from')
 })
 
 test('mistral validation is descriptor-backed and requires MISTRAL_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_MISTRAL = '1'
+  process.env.QUANTUM_USE_MISTRAL = '1'
   delete process.env.MISTRAL_API_KEY
 
   await expect(getProviderValidationError(process.env)).resolves.toBe(
-    'MISTRAL_API_KEY is required when CLAUDE_CODE_USE_MISTRAL=1.',
+    'MISTRAL_API_KEY is required when QUANTUM_USE_MISTRAL=1.',
   )
 })
 
 test('mistral validation still wins when stale openai mode is also set', async () => {
-  process.env.CLAUDE_CODE_USE_MISTRAL = '1'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_MISTRAL = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   delete process.env.MISTRAL_API_KEY
   delete process.env.OPENAI_API_KEY
 
   await expect(getProviderValidationError(process.env)).resolves.toBe(
-    'MISTRAL_API_KEY is required when CLAUDE_CODE_USE_MISTRAL=1.',
+    'MISTRAL_API_KEY is required when QUANTUM_USE_MISTRAL=1.',
   )
 })
 
 test('minimax validation accepts MINIMAX_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.minimax.io/v1'
   process.env.MINIMAX_API_KEY = 'minimax-live-key'
   delete process.env.OPENAI_API_KEY
@@ -150,7 +150,7 @@ test('minimax validation accepts MINIMAX_API_KEY without OPENAI_API_KEY', async 
 })
 
 test('minimax validation accepts MINIMAX_API_KEY on minimax chat host alias', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.minimax.chat/v1'
   process.env.MINIMAX_API_KEY = 'minimax-live-key'
   delete process.env.OPENAI_API_KEY
@@ -159,7 +159,7 @@ test('minimax validation accepts MINIMAX_API_KEY on minimax chat host alias', as
 })
 
 test('nvidia nim validation accepts NVIDIA_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://integrate.api.nvidia.com/v1'
   process.env.NVIDIA_API_KEY = 'nvidia-live-key'
   delete process.env.OPENAI_API_KEY
@@ -168,7 +168,7 @@ test('nvidia nim validation accepts NVIDIA_API_KEY without OPENAI_API_KEY', asyn
 })
 
 test('nvidia nim validation accepts NVIDIA_API_KEY for custom NIM endpoints when NVIDIA_NIM is set', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.NVIDIA_NIM = '1'
   process.env.OPENAI_BASE_URL = 'https://nim.example.com/v1'
   process.env.NVIDIA_API_KEY = 'nvidia-live-key'
@@ -178,7 +178,7 @@ test('nvidia nim validation accepts NVIDIA_API_KEY for custom NIM endpoints when
 })
 
 test('bankr validation accepts BNKR_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://llm.bankr.bot/v1'
   process.env.BNKR_API_KEY = 'bankr-live-key'
   delete process.env.OPENAI_API_KEY
@@ -187,7 +187,7 @@ test('bankr validation accepts BNKR_API_KEY without OPENAI_API_KEY', async () =>
 })
 
 test('openai validation does not accept unrelated minimax credentials', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1'
   process.env.MINIMAX_API_KEY = 'minimax-live-key'
   delete process.env.OPENAI_API_KEY
@@ -195,12 +195,12 @@ test('openai validation does not accept unrelated minimax credentials', async ()
   const error = await getProviderValidationError(process.env)
   expect(error).not.toBeNull()
   expect(error!).toContain(
-    'OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
+    'OPENAI_API_KEY is required when QUANTUM_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
   )
 })
 
 test('openrouter validation accepts OPENROUTER_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENROUTER_API_KEY = 'or-live-key'
   delete process.env.OPENAI_API_KEY
@@ -209,7 +209,7 @@ test('openrouter validation accepts OPENROUTER_API_KEY without OPENAI_API_KEY', 
 })
 
 test('deepseek validation accepts DEEPSEEK_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.deepseek.com/v1'
   process.env.DEEPSEEK_API_KEY = 'deepseek-live-key'
   delete process.env.OPENAI_API_KEY
@@ -218,7 +218,7 @@ test('deepseek validation accepts DEEPSEEK_API_KEY without OPENAI_API_KEY', asyn
 })
 
 test('moonshot validation accepts MOONSHOT_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.moonshot.ai/v1'
   process.env.MOONSHOT_API_KEY = 'moonshot-live-key'
   delete process.env.OPENAI_API_KEY
@@ -227,7 +227,7 @@ test('moonshot validation accepts MOONSHOT_API_KEY without OPENAI_API_KEY', asyn
 })
 
 test('xiaomi mimo validation accepts MIMO_API_KEY without OPENAI_API_KEY', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.MIMO_API_KEY = 'mimo-live-key'
   delete process.env.OPENAI_API_KEY
@@ -236,8 +236,8 @@ test('xiaomi mimo validation accepts MIMO_API_KEY without OPENAI_API_KEY', async
 })
 
 test('github validation stays descriptor-selected and reports missing auth', async () => {
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
-  delete process.env.CLAUDE_CODE_USE_OPENAI
+  process.env.QUANTUM_USE_GITHUB = '1'
+  delete process.env.QUANTUM_USE_OPENAI
   delete process.env.GITHUB_TOKEN
   delete process.env.GH_TOKEN
 
@@ -249,8 +249,8 @@ test('github validation stays descriptor-selected and reports missing auth', asy
 })
 
 test('github validation is skipped when openai mode is also active', async () => {
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1'
   delete process.env.GITHUB_TOKEN
   delete process.env.GH_TOKEN
@@ -259,7 +259,7 @@ test('github validation is skipped when openai mode is also active', async () =>
   const error = await getProviderValidationError(process.env)
   expect(error).not.toBeNull()
   expect(error!).toContain(
-    'OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
+    'OPENAI_API_KEY is required when QUANTUM_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
   )
 })
 

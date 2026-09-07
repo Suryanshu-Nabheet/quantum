@@ -8,7 +8,7 @@ export const CLAUDE_FOLDER_PERMISSION_PATTERN = '/.claude/**'
 export const GLOBAL_CLAUDE_FOLDER_PERMISSION_PATTERN = '~/.quantum/**'
 
 // Legacy alias kept so existing session-level rules still work during migration.
-export const LEGACY_GLOBAL_CLAUDE_FOLDER_PERMISSION_PATTERN = '~/.claude/**'
+export const LEGACY_GLOBAL_CLAUDE_FOLDER_PERMISSION_PATTERN = '~/.quantum/**'
 
 export const FILE_UNEXPECTEDLY_MODIFIED_ERROR =
   'File has been unexpectedly modified. Read it again before attempting to write it.'

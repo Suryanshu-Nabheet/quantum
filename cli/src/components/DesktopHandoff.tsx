@@ -3,20 +3,17 @@ import React, { useEffect, useState } from 'react';
 import type { CommandResultDisplay } from '../commands.js';
 // eslint-disable-next-line custom-rules/prefer-use-keybindings -- raw input for "any key" dismiss and y/n prompt
 import { Box, Text, useInput } from '../ink.js';
-import { openBrowser } from '../utils/browser.js';
+import { PRODUCT_URL } from '../constants/product.js';
 import { getDesktopInstallStatus, openCurrentSessionInDesktop } from '../utils/desktopDeepLink.js';
 import { errorMessage } from '../utils/errors.js';
 import { gracefulShutdown } from '../utils/gracefulShutdown.js';
 import { flushSessionStorage } from '../utils/sessionStorage.js';
 import { LoadingState } from './design-system/LoadingState.js';
-const DESKTOP_DOCS_URL = 'https://clau.de/desktop';
+
+const DESKTOP_DOCS_URL = PRODUCT_URL
+
 export function getDownloadUrl(): string {
-  switch (process.platform) {
-    case 'win32':
-      return 'https://claude.ai/api/desktop/win32/x64/exe/latest/redirect';
-    default:
-      return 'https://claude.ai/api/desktop/darwin/universal/dmg/latest/redirect';
-  }
+  return PRODUCT_URL
 }
 type DesktopHandoffState = 'checking' | 'prompt-download' | 'flushing' | 'opening' | 'success' | 'error';
 type Props = {

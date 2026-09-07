@@ -2,13 +2,13 @@ import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test'
 import { resetSettingsCache } from './settings/settingsCache.js'
 
 const ENV_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_MISTRAL',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
-  'CLAUDE_CODE_USE_FOUNDRY',
+  'QUANTUM_USE_OPENAI',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_MISTRAL',
+  'QUANTUM_USE_BEDROCK',
+  'QUANTUM_USE_VERTEX',
+  'QUANTUM_USE_FOUNDRY',
   'OPENAI_BASE_URL',
   'OPENAI_API_BASE',
   'OPENAI_MODEL',
@@ -57,7 +57,7 @@ async function importFreshThinkingModule() {
 
 describe('modelSupportsThinking — Z.AI GLM', () => {
   test('enables thinking for exact GLM models on api.z.ai', async () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     process.env.OPENAI_BASE_URL = 'https://api.z.ai/api/coding/paas/v4'
     const { modelSupportsThinking } = await importFreshThinkingModule()
 
@@ -68,7 +68,7 @@ describe('modelSupportsThinking — Z.AI GLM', () => {
   })
 
   test('does not enable GLM thinking on non-Z.AI OpenAI-compatible endpoints', async () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     process.env.OPENAI_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
     const { modelSupportsThinking } = await importFreshThinkingModule()
 
@@ -77,7 +77,7 @@ describe('modelSupportsThinking — Z.AI GLM', () => {
   })
 
   test('does not match unrelated GLM-looking model names', async () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     process.env.OPENAI_BASE_URL = 'https://api.z.ai/api/coding/paas/v4'
     const { modelSupportsThinking } = await importFreshThinkingModule()
 
@@ -85,7 +85,7 @@ describe('modelSupportsThinking — Z.AI GLM', () => {
   })
 
   test('does not reuse stale capability overrides after env changes', async () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     process.env.OPENAI_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
     process.env.ANTHROPIC_DEFAULT_SONNET_MODEL = 'GLM-5.1'
     process.env.ANTHROPIC_DEFAULT_SONNET_MODEL_SUPPORTED_CAPABILITIES = ''

@@ -18,7 +18,7 @@ import { createHash } from 'crypto'
 import { userInfo } from 'os'
 import { PRODUCT_DISPLAY_NAME } from '../../constants/product.js'
 import { getOauthConfig } from '../../constants/oauth.js'
-import { getClaudeConfigHomeDir } from '../envUtils.js'
+import { getQuantumConfigHomeDir } from '../envUtils.js'
 import type { SecureStorageData } from './index.js'
 
 // Suffix distinguishing the OAuth credentials keychain entry from the legacy
@@ -31,8 +31,8 @@ function buildStorageServiceName(
   baseName: string,
   serviceSuffix: string = '',
 ): string {
-  const configDir = getClaudeConfigHomeDir()
-  const isDefaultDir = !process.env.CLAUDE_CONFIG_DIR
+  const configDir = getQuantumConfigHomeDir()
+  const isDefaultDir = !process.env.QUANTUM_CONFIG_DIR
 
   const dirHash = isDefaultDir
     ? ''
@@ -41,7 +41,7 @@ function buildStorageServiceName(
 }
 
 /**
- * Get the service/resource name for secure storage, scoped by CLAUDE_CONFIG_DIR
+ * Get the service/resource name for secure storage, scoped by QUANTUM_CONFIG_DIR
  * if it's set to a non-default location.
  */
 export function getSecureStorageServiceName(
@@ -50,11 +50,11 @@ export function getSecureStorageServiceName(
   return buildStorageServiceName(PRODUCT_DISPLAY_NAME, serviceSuffix)
 }
 
-/** Legacy keychain service name for credentials migrated from Claude Code. */
+/** Legacy keychain service name for credentials migrated from Quantum CLI. */
 export function getLegacySecureStorageServiceName(
   serviceSuffix: string = '',
 ): string {
-  return buildStorageServiceName('Claude Code', serviceSuffix)
+  return buildStorageServiceName('Quantum CLI', serviceSuffix)
 }
 
 export function getMacOsKeychainStorageServiceName(
@@ -78,7 +78,7 @@ export function getUsername(): string {
 // refreshing/invalidating tokens) without forcing a blocking spawnSync on
 // every read. In-process writes invalidate via clearKeychainCache() directly.
 //
-// The sync read() path takes ~500ms per `security` spawn. With 50+ claude.ai
+// The sync read() path takes ~500ms per `security` spawn. With 50+ remote
 // MCP connectors authenticating at startup, a short TTL expires mid-storm and
 // triggers repeat sync reads — observed as a 5.5s event-loop stall
 // (go/ccshare/adamj-20260326-212235). 30s of cross-process staleness is fine:

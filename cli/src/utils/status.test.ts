@@ -47,7 +47,7 @@ afterEach(() => {
 })
 
 test('buildAPIProviderProperties labels NVIDIA NIM sessions', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.NVIDIA_NIM = '1'
   process.env.OPENAI_BASE_URL = 'https://integrate.api.nvidia.com/v1'
   process.env.OPENAI_MODEL = 'nvidia/llama-3.1-nemotron-70b-instruct'
@@ -62,7 +62,7 @@ test('buildAPIProviderProperties labels NVIDIA NIM sessions', async () => {
 })
 
 test('buildAPIProviderProperties labels MiniMax sessions', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.MINIMAX_API_KEY = 'minimax-key'
   process.env.OPENAI_BASE_URL = 'https://api.minimax.chat/v1'
   process.env.OPENAI_MODEL = 'MiniMax-M2.5'
@@ -75,7 +75,7 @@ test('buildAPIProviderProperties labels MiniMax sessions', async () => {
 })
 
 test('buildAPIProviderProperties keeps Codex-specific labels on the shared OpenAI-compatible path', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = DEFAULT_CODEX_BASE_URL
   process.env.OPENAI_MODEL = 'codexplan'
   process.env.CHATGPT_ACCOUNT_ID = 'acct_123'

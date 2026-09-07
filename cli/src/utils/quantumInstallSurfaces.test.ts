@@ -63,7 +63,7 @@ test('cleanupNpmInstallations removes both quantum and legacy claude local insta
   }))
 
   mock.module('./envUtils.js', () => ({
-    getClaudeConfigHomeDir: () => join(homedir(), '.quantum'),
+    getQuantumConfigHomeDir: () => join(homedir(), '.quantum'),
     isEnvTruthy: (value: string | undefined) => value === '1',
   }))
 

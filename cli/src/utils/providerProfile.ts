@@ -37,7 +37,7 @@ export {
   sanitizeApiKey,
   sanitizeProviderConfigValue,
 } from './providerSecrets.js'
-import { getClaudeConfigHomeDir, isEnvTruthy } from './envUtils.js'
+import { getQuantumConfigHomeDir, isEnvTruthy } from './envUtils.js'
 
 export const PROFILE_FILE_NAME = '.quantum-profile.json'
 export const DEFAULT_GEMINI_BASE_URL =
@@ -47,13 +47,13 @@ export const DEFAULT_MISTRAL_BASE_URL = 'https://api.mistral.ai/v1'
 export const DEFAULT_MISTRAL_MODEL = 'devstral-latest'
 
 const PROFILE_ENV_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_MISTRAL',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
-  'CLAUDE_CODE_USE_FOUNDRY',
+  'QUANTUM_USE_OPENAI',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_MISTRAL',
+  'QUANTUM_USE_BEDROCK',
+  'QUANTUM_USE_VERTEX',
+  'QUANTUM_USE_FOUNDRY',
   'ANTHROPIC_BASE_URL',
   'ANTHROPIC_MODEL',
   'ANTHROPIC_API_KEY',
@@ -205,7 +205,7 @@ type ProfileFileLocation = {
 }
 
 export function getDefaultProfileFilePath(): string {
-  return join(getClaudeConfigHomeDir(), PROFILE_FILE_NAME)
+  return join(getQuantumConfigHomeDir(), PROFILE_FILE_NAME)
 }
 
 function resolveLegacyProfileFilePath(cwd = process.cwd()): string {
@@ -810,26 +810,26 @@ function buildXaiProfileEnv(options: {
 function getCompatibilityProfileFlag(
   compatibilityMode: CompatibilityProfileMode,
 ):
-  | 'CLAUDE_CODE_USE_OPENAI'
-  | 'CLAUDE_CODE_USE_GITHUB'
-  | 'CLAUDE_CODE_USE_GEMINI'
-  | 'CLAUDE_CODE_USE_MISTRAL'
-  | 'CLAUDE_CODE_USE_BEDROCK'
-  | 'CLAUDE_CODE_USE_VERTEX'
+  | 'QUANTUM_USE_OPENAI'
+  | 'QUANTUM_USE_GITHUB'
+  | 'QUANTUM_USE_GEMINI'
+  | 'QUANTUM_USE_MISTRAL'
+  | 'QUANTUM_USE_BEDROCK'
+  | 'QUANTUM_USE_VERTEX'
   | undefined {
   switch (compatibilityMode) {
     case 'openai':
-      return 'CLAUDE_CODE_USE_OPENAI'
+      return 'QUANTUM_USE_OPENAI'
     case 'github':
-      return 'CLAUDE_CODE_USE_GITHUB'
+      return 'QUANTUM_USE_GITHUB'
     case 'gemini':
-      return 'CLAUDE_CODE_USE_GEMINI'
+      return 'QUANTUM_USE_GEMINI'
     case 'mistral':
-      return 'CLAUDE_CODE_USE_MISTRAL'
+      return 'QUANTUM_USE_MISTRAL'
     case 'bedrock':
-      return 'CLAUDE_CODE_USE_BEDROCK'
+      return 'QUANTUM_USE_BEDROCK'
     case 'vertex':
-      return 'CLAUDE_CODE_USE_VERTEX'
+      return 'QUANTUM_USE_VERTEX'
     default:
       return undefined
   }
@@ -960,29 +960,29 @@ export function hasExplicitProviderSelection(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): boolean {
   // If env was already applied from a provider profile, preserve it.
-  if (processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED === '1') {
+  if (processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED === '1') {
     return true
   }
 
   return (
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_OPENAI) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_MISTRAL) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_BEDROCK) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_VERTEX) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_FOUNDRY)
+    isEnvTruthy(processEnv.QUANTUM_USE_OPENAI) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_GITHUB) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_GEMINI) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_MISTRAL) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_BEDROCK) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_VERTEX) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_FOUNDRY)
   )
 }
 
 function hasConcreteProviderSelection(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  if (processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED === '1') {
+  if (processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED === '1') {
     return true
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_OPENAI)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_OPENAI)) {
     return (
       sanitizeProviderConfigValue(processEnv.OPENAI_BASE_URL) !== undefined ||
       sanitizeProviderConfigValue(processEnv.OPENAI_API_BASE) !== undefined ||
@@ -992,7 +992,7 @@ function hasConcreteProviderSelection(
     )
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GEMINI)) {
     return (
       sanitizeProviderConfigValue(processEnv.GEMINI_BASE_URL) !== undefined ||
       normalizeProfileModel(
@@ -1003,7 +1003,7 @@ function hasConcreteProviderSelection(
     )
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_MISTRAL)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_MISTRAL)) {
     return (
       sanitizeProviderConfigValue(processEnv.MISTRAL_BASE_URL) !== undefined ||
       normalizeProfileModel(
@@ -1013,7 +1013,7 @@ function hasConcreteProviderSelection(
     )
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GITHUB)) {
     return (
       sanitizeApiKey(processEnv.GITHUB_TOKEN) !== undefined ||
       sanitizeApiKey(processEnv.GH_TOKEN) !== undefined ||
@@ -1024,9 +1024,9 @@ function hasConcreteProviderSelection(
   }
 
   return (
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_BEDROCK) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_VERTEX) ||
-    isEnvTruthy(processEnv.CLAUDE_CODE_USE_FOUNDRY)
+    isEnvTruthy(processEnv.QUANTUM_USE_BEDROCK) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_VERTEX) ||
+    isEnvTruthy(processEnv.QUANTUM_USE_FOUNDRY)
   )
 }
 
@@ -1113,12 +1113,12 @@ export async function buildLaunchEnv(options: {
 
   if (hasExplicitProviderSelection(processEnv)) {
     const explicitProfileOverrides: Array<[string, ProviderProfile]> = [
-      ['CLAUDE_CODE_USE_GITHUB', 'github'],
-      ['CLAUDE_CODE_USE_BEDROCK', 'bedrock'],
-      ['CLAUDE_CODE_USE_VERTEX', 'vertex'],
-      ['CLAUDE_CODE_USE_MISTRAL', 'mistral'],
-      ['CLAUDE_CODE_USE_GEMINI', 'gemini'],
-      ['CLAUDE_CODE_USE_OPENAI', 'openai'],
+      ['QUANTUM_USE_GITHUB', 'github'],
+      ['QUANTUM_USE_BEDROCK', 'bedrock'],
+      ['QUANTUM_USE_VERTEX', 'vertex'],
+      ['QUANTUM_USE_MISTRAL', 'mistral'],
+      ['QUANTUM_USE_GEMINI', 'gemini'],
+      ['QUANTUM_USE_OPENAI', 'openai'],
     ]
 
     for (const [envKey, provider] of explicitProfileOverrides) {
@@ -1486,7 +1486,7 @@ export async function buildStartupEnvFromProfile(options?: {
   const processEnv = options?.processEnv ?? process.env
   const persisted = options?.persisted ?? loadProfileFile()
 
-  const profileManagedEnv = processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED === '1'
+  const profileManagedEnv = processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED === '1'
   const hasConfiguredProviderProfile =
     options?.hasConfiguredProviderProfile ?? false
 
@@ -1494,7 +1494,7 @@ export async function buildStartupEnvFromProfile(options?: {
   // first-run / fallback mechanism. The newer plural provider-profile
   // system (`/provider` presets + activeProviderProfileId in config) is
   // applied earlier in the bootstrap via applyActiveProviderProfileFromConfig
-  // and signals completion with CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED=1.
+  // and signals completion with QUANTUM_PROVIDER_PROFILE_ENV_APPLIED=1.
   //
   // If the plural system has already set env, trust it — do NOT overlay the
   // legacy file. addProviderProfile() does not sync the legacy file, so a
@@ -1518,7 +1518,7 @@ export async function buildStartupEnvFromProfile(options?: {
     return processEnv
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GITHUB)) {
     return processEnv
   }
 
@@ -1574,7 +1574,7 @@ export async function applySavedProfileToCurrentSession(options: {
   const processEnv = options.processEnv ?? process.env
   const hasExplicitSelection = hasExplicitProviderSelection(processEnv)
   const profileManagedEnv =
-    processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED === '1'
+    processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED === '1'
 
   if (options.profileFile.profile === 'codex' && hasExplicitSelection) {
     const isCodexOAuthProfile =
@@ -1595,16 +1595,16 @@ export async function applySavedProfileToCurrentSession(options: {
       getOllamaChatBaseUrl,
       readGeminiAccessToken,
     })
-    delete explicitEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED
-    delete explicitEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED_ID
+    delete explicitEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED
+    delete explicitEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED_ID
     const validationEnv = isCodexOAuthProfile
       ? { ...explicitEnv, CODEX_API_KEY: 'codex-oauth-token-for-validation' }
       : explicitEnv
     const validationError = await getProviderValidationError(validationEnv)
 
     if (profileManagedEnv) {
-      delete processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED
-      delete processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED_ID
+      delete processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED
+      delete processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED_ID
       applyProfileEnvToProcessEnv(processEnv, explicitEnv)
       return validationError
     }
@@ -1620,15 +1620,15 @@ export async function applySavedProfileToCurrentSession(options: {
     options.profileFile.profile === 'codex' &&
     options.profileFile.env.CODEX_CREDENTIAL_SOURCE === 'oauth'
 
-  delete baseEnv.CLAUDE_CODE_USE_OPENAI
-  delete baseEnv.CLAUDE_CODE_USE_GITHUB
-  delete baseEnv.CLAUDE_CODE_USE_GEMINI
-  delete baseEnv.CLAUDE_CODE_USE_MISTRAL
-  delete baseEnv.CLAUDE_CODE_USE_BEDROCK
-  delete baseEnv.CLAUDE_CODE_USE_VERTEX
-  delete baseEnv.CLAUDE_CODE_USE_FOUNDRY
-  delete baseEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED
-  delete baseEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED_ID
+  delete baseEnv.QUANTUM_USE_OPENAI
+  delete baseEnv.QUANTUM_USE_GITHUB
+  delete baseEnv.QUANTUM_USE_GEMINI
+  delete baseEnv.QUANTUM_USE_MISTRAL
+  delete baseEnv.QUANTUM_USE_BEDROCK
+  delete baseEnv.QUANTUM_USE_VERTEX
+  delete baseEnv.QUANTUM_USE_FOUNDRY
+  delete baseEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED
+  delete baseEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED_ID
 
   if (isCodexOAuthProfile) {
     delete baseEnv.CODEX_API_KEY
@@ -1652,8 +1652,8 @@ export async function applySavedProfileToCurrentSession(options: {
     return validationError
   }
 
-  delete processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED
-  delete processEnv.CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED_ID
+  delete processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED
+  delete processEnv.QUANTUM_PROVIDER_PROFILE_ENV_APPLIED_ID
   applyProfileEnvToProcessEnv(processEnv, nextEnv)
   return null
 }

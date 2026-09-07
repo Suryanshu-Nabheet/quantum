@@ -6,12 +6,12 @@ import axios from 'axios'
 import { OAUTH_BETA_HEADER } from '../constants/oauth.js'
 import {
   getAnthropicApiKey,
-  getClaudeAIOAuthTokens,
+  getQuantumOAuthTokens,
   handleOAuth401Error,
-  isClaudeAISubscriber,
+  isQuantumSubscriber,
 } from './auth.js'
 import { getAPIProvider } from './model/providers.js'
-import { getClaudeCodeUserAgent } from './userAgent.js'
+import { getQuantumUserAgent } from './userAgent.js'
 import { getWorkload } from './workloadContext.js'
 
 // WARNING: We rely on `claude-cli` in the user agent for log filtering.
@@ -32,13 +32,13 @@ export function getUserAgent(): string {
   // so the read picks up the same setWorkload() value as getAttributionHeader.
   const workload = getWorkload()
   const workloadSuffix = workload ? `, workload/${workload}` : ''
-  return `quantum-cli/${MACRO.DISPLAY_VERSION ?? MACRO.VERSION} (${process.env.USER_TYPE}, ${process.env.CLAUDE_CODE_ENTRYPOINT ?? 'cli'}${agentSdkVersion}${clientApp}${workloadSuffix})`
+  return `quantum-cli/${MACRO.DISPLAY_VERSION ?? MACRO.VERSION} (${process.env.USER_TYPE}, ${process.env.QUANTUM_ENTRYPOINT ?? 'cli'}${agentSdkVersion}${clientApp}${workloadSuffix})`
 }
 
 export function getMCPUserAgent(): string {
   const parts: string[] = []
-  if (process.env.CLAUDE_CODE_ENTRYPOINT) {
-    parts.push(process.env.CLAUDE_CODE_ENTRYPOINT)
+  if (process.env.QUANTUM_ENTRYPOINT) {
+    parts.push(process.env.QUANTUM_ENTRYPOINT)
   }
   if (process.env.CLAUDE_AGENT_SDK_VERSION) {
     parts.push(`agent-sdk/${process.env.CLAUDE_AGENT_SDK_VERSION}`)
@@ -53,13 +53,13 @@ export function getMCPUserAgent(): string {
 // User-Agent for WebFetch requests to arbitrary sites. `Claude-User` is
 // The first-party provider's publicly documented agent for user-initiated fetches (what site
 // operators match in robots.txt); the claude-code suffix lets them distinguish
-// local CLI traffic from claude.ai server-side fetches.
+// local CLI traffic from the remote client server-side fetches.
 export function getWebFetchUserAgent(): string {
   const supportUrl =
     getAPIProvider() === 'firstParty'
       ? 'https://support.anthropic.com/'
       : 'https://github.com/SuryanshuNabheet/quantum'
-  return `Claude-User (${getClaudeCodeUserAgent()}; +${supportUrl})`
+  return `Claude-User (${getQuantumUserAgent()}; +${supportUrl})`
 }
 
 export type AuthHeaders = {
@@ -72,8 +72,8 @@ export type AuthHeaders = {
  * Returns either OAuth headers for Max/Pro users or API key headers for regular users
  */
 export function getAuthHeaders(): AuthHeaders {
-  if (isClaudeAISubscriber()) {
-    const oauthTokens = getClaudeAIOAuthTokens()
+  if (isQuantumSubscriber()) {
+    const oauthTokens = getQuantumOAuthTokens()
     if (!oauthTokens?.accessToken) {
       return {
         headers: {},
@@ -133,7 +133,7 @@ export async function withOAuth401Retry<T>(
         typeof err.response?.data === 'string' &&
         err.response.data.includes('OAuth token has been revoked'))
     if (!isAuthError) throw err
-    const failedAccessToken = getClaudeAIOAuthTokens()?.accessToken
+    const failedAccessToken = getQuantumOAuthTokens()?.accessToken
     if (!failedAccessToken) throw err
     await handleOAuth401Error(failedAccessToken)
     return await request()

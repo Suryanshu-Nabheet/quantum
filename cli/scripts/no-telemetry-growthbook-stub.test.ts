@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 
 // ---------------------------------------------------------------------------
 // Setup: dynamically import the source-level growthbook no-op stub.
-// The stub reads ~/.claude/feature-flags.json for local flag overrides.
+// The stub reads ~/.quantum/feature-flags.json for local flag overrides.
 // ---------------------------------------------------------------------------
 
 const testDir = join(tmpdir(), `growthbook-stub-test-${process.pid}`)
@@ -14,7 +14,7 @@ const flagsFile = join(testDir, 'test-flags.json')
 mkdirSync(testDir, { recursive: true })
 
 // Point the stub at our test flags file before import
-process.env.CLAUDE_FEATURE_FLAGS_FILE = flagsFile
+process.env.QUANTUM_FEATURE_FLAGS_FILE = flagsFile
 
 const stub = await import('../src/services/analytics/growthbook.js')
 
@@ -30,7 +30,7 @@ describe('growthbook stub — local feature flag overrides', () => {
 
   afterAll(() => {
     rmSync(testDir, { recursive: true, force: true })
-    delete process.env.CLAUDE_FEATURE_FLAGS_FILE
+    delete process.env.QUANTUM_FEATURE_FLAGS_FILE
   })
 
   // ── File absent ──────────────────────────────────────────────────

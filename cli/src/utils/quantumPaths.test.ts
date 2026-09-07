@@ -38,7 +38,7 @@ afterEach(() => {
 
 describe('Quantum paths', () => {
   test('defaults user config home to ~/.quantum', async () => {
-    delete process.env.CLAUDE_CONFIG_DIR
+    delete process.env.QUANTUM_CONFIG_DIR
     const { resolveClaudeConfigHomeDir } = await importFreshEnvUtils()
 
     expect(
@@ -49,7 +49,7 @@ describe('Quantum paths', () => {
   })
 
   test('hard-cuts user config home to ~/.quantum by default', async () => {
-    delete process.env.CLAUDE_CONFIG_DIR
+    delete process.env.QUANTUM_CONFIG_DIR
     const { resolveClaudeConfigHomeDir } = await importFreshEnvUtils()
 
     expect(
@@ -130,7 +130,7 @@ describe('Quantum paths', () => {
     }
   })
 
-  test('migration skips explicit CLAUDE_CONFIG_DIR overrides', async () => {
+  test('migration skips explicit QUANTUM_CONFIG_DIR overrides', async () => {
     const tempHome = mkdtempSync(join(tmpdir(), 'quantum-paths-test-'))
     try {
       mkdirSync(join(tempHome, '.claude'), { recursive: true })
@@ -188,18 +188,18 @@ describe('Quantum paths', () => {
         homedir: () => tempHome,
         tmpdir,
       }))
-      delete process.env.CLAUDE_CONFIG_DIR
+      delete process.env.QUANTUM_CONFIG_DIR
 
-      const { getClaudeConfigHomeDir } = await importFreshEnvUtils()
+      const { getQuantumConfigHomeDir } = await importFreshEnvUtils()
 
-      expect(getClaudeConfigHomeDir()).toBe(join(tempHome, '.claude'))
+      expect(getQuantumConfigHomeDir()).toBe(join(tempHome, '.claude'))
     } finally {
       rmSync(tempHome, { recursive: true, force: true })
     }
   })
 
   test('default plans directory uses ~/.quantum/plans', async () => {
-    delete process.env.CLAUDE_CONFIG_DIR
+    delete process.env.QUANTUM_CONFIG_DIR
     const { getDefaultPlansDirectory } = await importFreshPlans()
 
     expect(getDefaultPlansDirectory({ homeDir: homedir() })).toBe(
@@ -207,7 +207,7 @@ describe('Quantum paths', () => {
     )
   })
 
-  test('default plans directory respects explicit CLAUDE_CONFIG_DIR', async () => {
+  test('default plans directory respects explicit QUANTUM_CONFIG_DIR', async () => {
     const { getDefaultPlansDirectory } = await importFreshPlans()
 
     expect(
@@ -223,7 +223,7 @@ describe('Quantum paths', () => {
     ).toBe(join('/tmp/caf\u00e9', '.quantum', 'plans'))
   })
 
-  test('default plans directory normalizes explicit CLAUDE_CONFIG_DIR to NFC', async () => {
+  test('default plans directory normalizes explicit QUANTUM_CONFIG_DIR to NFC', async () => {
     const { getDefaultPlansDirectory } = await importFreshPlans()
 
     expect(
@@ -231,12 +231,12 @@ describe('Quantum paths', () => {
     ).toBe(join('/tmp/caf\u00e9-quantum', 'plans'))
   })
 
-  test('uses CLAUDE_CONFIG_DIR override when provided', async () => {
-    process.env.CLAUDE_CONFIG_DIR = '/tmp/custom-quantum'
-    const { getClaudeConfigHomeDir, resolveClaudeConfigHomeDir } =
+  test('uses QUANTUM_CONFIG_DIR override when provided', async () => {
+    process.env.QUANTUM_CONFIG_DIR = '/tmp/custom-quantum'
+    const { getQuantumConfigHomeDir, resolveClaudeConfigHomeDir } =
       await importFreshEnvUtils()
 
-    expect(getClaudeConfigHomeDir()).toBe('/tmp/custom-quantum')
+    expect(getQuantumConfigHomeDir()).toBe('/tmp/custom-quantum')
     expect(
       resolveClaudeConfigHomeDir({
         configDirEnv: '/tmp/custom-quantum',
@@ -257,8 +257,8 @@ describe('Quantum paths', () => {
 
   test('local installer uses quantum wrapper path', async () => {
     // Force .quantum config home so the test doesn't fall back to
-    // ~/.claude when ~/.quantum doesn't exist on this machine.
-    process.env.CLAUDE_CONFIG_DIR = join(homedir(), '.quantum')
+    // ~/.quantum when ~/.quantum doesn't exist on this machine.
+    process.env.QUANTUM_CONFIG_DIR = join(homedir(), '.quantum')
     const { getLocalClaudePath } = await importFreshLocalInstaller()
 
     expect(getLocalClaudePath()).toBe(

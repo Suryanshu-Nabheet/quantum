@@ -7,8 +7,8 @@
  */
 
 type LimitEnvVar =
-  | 'CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS'
-  | 'CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS'
+  | 'QUANTUM_OPENAI_CONTEXT_WINDOWS'
+  | 'QUANTUM_OPENAI_MAX_OUTPUT_TOKENS'
 
 function readExternalLimits(
   envVarName: LimitEnvVar,
@@ -119,7 +119,7 @@ export function getOpenAIContextWindow(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): number | undefined {
   return lookupExternalLimit(
-    'CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS',
+    'QUANTUM_OPENAI_CONTEXT_WINDOWS',
     model,
     processEnv,
   )
@@ -130,7 +130,7 @@ export function getOpenAIMaxOutputTokens(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): number | undefined {
   return lookupExternalLimit(
-    'CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS',
+    'QUANTUM_OPENAI_MAX_OUTPUT_TOKENS',
     model,
     processEnv,
   )

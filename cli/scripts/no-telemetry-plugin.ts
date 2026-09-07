@@ -78,7 +78,7 @@ export function shouldShowUndercoverAutoNotice() { return false; }
 `,
 
 	'types/generated/events_mono/claude_code/v1/claude_code_internal_event': `
-export const ClaudeCodeInternalEvent = {
+export const QuantumInternalEvent = {
   fromJSON: value => value,
   toJSON: value => value,
   create: value => value ?? {},
@@ -112,6 +112,50 @@ export const Timestamp = {
   fromPartial: value => value ?? {},
 };
 `,
+	// ─── Product OAuth / Claude.ai phone-home (permanently disabled) ──
+
+	'services/oauth/index': `
+export class OAuthService {
+  constructor() {}
+  async startOAuthFlow() { throw new Error('Quantum CLI does not support Claude.ai product OAuth. Use an API key or provider profile.'); }
+  async createApiKey() { throw new Error('OAuth disabled in Quantum CLI'); }
+}
+export async function refreshOAuthToken() { return null; }
+`,
+
+	'services/oauth/client': `
+export function shouldUseQuantumOAuth() { return false; }
+export function parseScopes() { return []; }
+export function buildAuthUrl() { return ''; }
+export async function exchangeCodeForTokens() { throw new Error('OAuth disabled in Quantum CLI'); }
+export async function refreshOAuthToken() { return null; }
+export async function fetchAndStoreUserRoles() { return null; }
+export async function createAndStoreApiKey() { return null; }
+export function isOAuthTokenExpired() { return true; }
+export async function fetchProfileInfo() { return {}; }
+export async function getOrganizationUUID() { return null; }
+export function shouldRefreshOAuthAccountInfo() { return false; }
+export async function populateOAuthAccountInfoIfNeeded() { return false; }
+export function storeOAuthAccountInfo() {}
+`,
+
+	'services/oauth/getOauthProfile': `
+export async function getOauthProfileFromApiKey() { return null; }
+export async function getOauthProfileFromOauthToken() { return null; }
+export async function getOauthProfile() { return null; }
+export async function fetchClaudeCliProfile() { return null; }
+`,
+
+	'services/mcp/claudeai': `
+export async function fetchClaudeAiMcpServers() { return []; }
+export async function fetchClaudeAIMcpConfigsIfEligible() { return {}; }
+export function clearClaudeAIMcpConfigsCache() {}
+export function markClaudeAiMcpConnected() {}
+export function hasClaudeAiMcpEverConnected() { return false; }
+export function isClaudeAiMcpServer() { return false; }
+`,
+
+
 }
 
 function escapeForResolvedPathRegex(modulePath: string): string {
@@ -124,10 +168,8 @@ export const noTelemetryPlugin: BunPlugin = {
 	name: 'no-telemetry',
 	setup(build) {
 		for (const [modulePath, contents] of Object.entries(stubs)) {
-			// Build regex that matches the resolved file path on any OS
-			// e.g. "services/analytics/growthbook" → /services[/\\]analytics[/\\]growthbook\.(ts|js)$/
 			const escaped = escapeForResolvedPathRegex(modulePath)
-			const filter = new RegExp(`${escaped}\\.(ts|js)$`)
+			const filter = new RegExp(`${escaped}\\.(ts|js|tsx)$`)
 
 			build.onLoad({ filter }, () => ({
 				contents,

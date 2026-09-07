@@ -300,7 +300,7 @@ function buildObservedDefinition(
       getSourceType(activeConfig) === 'plugin'
         ? `plugin:${activeConfig.pluginSource ?? 'unknown'}`
         : getSourceType(activeConfig) === 'claudeai'
-          ? 'claude.ai'
+          ? 'oauth'
           : activeConfig.scope,
     transport: getTransport(activeConfig),
     runtimeVisible: options?.runtimeVisible ?? true,
@@ -319,7 +319,7 @@ function hasDefinitionForRuntimeSource(
     runtimeSourceType === 'plugin'
       ? `plugin:${runtimeConfig.pluginSource ?? 'unknown'}`
       : runtimeSourceType === 'claudeai'
-        ? 'claude.ai'
+        ? 'oauth'
         : deps.describeMcpConfigFilePath(runtimeConfig.scope)
 
   return definitions.some(

@@ -156,11 +156,11 @@ export function resolveClaudeConfigHomeDir(options?: {
   return quantumDir.normalize('NFC')
 }
 
-// Memoized: 150+ callers, many on hot paths. Keyed off CLAUDE_CONFIG_DIR so
+// Memoized: 150+ callers, many on hot paths. Keyed off QUANTUM_CONFIG_DIR so
 // tests that change the env var get a fresh value without explicit cache.clear.
-export const getClaudeConfigHomeDir = memoize(
+export const getQuantumConfigHomeDir = memoize(
   (): string => {
-    const configDirEnv = process.env.CLAUDE_CONFIG_DIR
+    const configDirEnv = process.env.QUANTUM_CONFIG_DIR
     const homeDir = homedir()
     const migrationSucceeded = migrateLegacyClaudeConfigHome({
       configDirEnv,
@@ -183,15 +183,15 @@ export const getClaudeConfigHomeDir = memoize(
       homeDir,
     })
   },
-  () => process.env.CLAUDE_CONFIG_DIR,
+  () => process.env.QUANTUM_CONFIG_DIR,
 )
 
 export function getTeamsDir(): string {
-  return join(getClaudeConfigHomeDir(), 'teams')
+  return join(getQuantumConfigHomeDir(), 'teams')
 }
 
 export function getProjectsDir(): string {
-  return join(getClaudeConfigHomeDir(), 'projects')
+  return join(getQuantumConfigHomeDir(), 'projects')
 }
 
 /**
@@ -224,19 +224,19 @@ export function isEnvDefinedFalsy(
 }
 
 /**
- * --bare / CLAUDE_CODE_SIMPLE — skip hooks, LSP, plugin sync, skill dir-walk,
+ * --bare / QUANTUM_SIMPLE — skip hooks, LSP, plugin sync, skill dir-walk,
  * attribution, background prefetches, and ALL keychain/credential reads.
  * Auth is strictly ANTHROPIC_API_KEY env or apiKeyHelper from --settings.
  * Explicit CLI flags (--plugin-dir, --add-dir, --mcp-config) still honored.
  * ~30 gates across the codebase.
  *
  * Checks argv directly (in addition to the env var) because several gates
- * run before main.tsx's action handler sets CLAUDE_CODE_SIMPLE=1 from --bare
+ * run before main.tsx's action handler sets QUANTUM_SIMPLE=1 from --bare
  * — notably startKeychainPrefetch() at main.tsx top-level.
  */
 export function isBareMode(): boolean {
   return (
-    isEnvTruthy(process.env.CLAUDE_CODE_SIMPLE) ||
+    isEnvTruthy(process.env.QUANTUM_SIMPLE) ||
     process.argv.includes('--bare')
   )
 }
@@ -300,7 +300,7 @@ export function isRunningOnHomespace(): boolean {
 }
 
 /**
- * Conservative check for whether Claude Code is running inside a protected
+ * Conservative check for whether Quantum CLI is running inside a protected
  * (privileged or ASL3+) COO namespace or cluster.
  *
  * Conservative means: when signals are ambiguous, assume protected. We would

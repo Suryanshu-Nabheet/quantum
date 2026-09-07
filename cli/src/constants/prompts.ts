@@ -96,7 +96,7 @@ const skillSearchFeatureCheck = false
 import type { OutputStyleConfig } from './outputStyles.js'
 import { CYBER_RISK_INSTRUCTION } from './cyberRiskInstruction.js'
 
-export const CLAUDE_CODE_DOCS_MAP_URL =
+export const QUANTUM_DOCS_MAP_URL =
   'https://github.com/SuryanshuNabheet/quantum'
 
 /**
@@ -437,7 +437,7 @@ export async function getSystemPrompt(
   additionalWorkingDirectories?: string[],
   mcpClients?: MCPServerConnection[],
 ): Promise<string[]> {
-  if (isEnvTruthy(process.env.CLAUDE_CODE_SIMPLE)) {
+  if (isEnvTruthy(process.env.QUANTUM_SIMPLE)) {
     return [
       `You are Quantum, an open-source coding agent and CLI Developed by Suryanshu Nabheet.\n\nCWD: ${getCwd()}\nDate: ${getSessionStartDate()}`,
     ]

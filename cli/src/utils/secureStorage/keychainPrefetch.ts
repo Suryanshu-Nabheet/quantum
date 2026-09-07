@@ -6,7 +6,7 @@
  * SEQUENTIALLY via sync execSync during applySafeConfigEnvironmentVariables():
  *   1. "Quantum-credentials" (OAuth tokens) — ~32ms
  *   2. "Quantum" (API key) — ~33ms
- * Legacy "Claude Code*" entries are prefetched in parallel for migration.
+ * Legacy "Quantum CLI*" entries are prefetched in parallel for migration.
  * Sequential cost: ~65ms on every macOS startup.
  *
  * Firing both here lets the subprocesses run in parallel with the ~65ms of

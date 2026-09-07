@@ -71,7 +71,7 @@ test('useApiKeyVerification resets stale missing status when the session switche
     }),
     getApiKeyFromApiKeyHelper: async () => undefined,
     isAnthropicAuthEnabled: () => authState.anthropicAuthEnabled,
-    isClaudeAISubscriber: () => authState.claudeSubscriber,
+    isQuantumSubscriber: () => authState.claudeSubscriber,
   }))
 
   mock.module('../bootstrap/state.js', () => ({

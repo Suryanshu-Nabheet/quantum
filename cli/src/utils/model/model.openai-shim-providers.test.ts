@@ -6,7 +6,7 @@ async function importFreshModelModule() {
   mock.restore()
   mock.module('../auth.js', () => ({
     getSubscriptionType: () => 'max',
-    isClaudeAISubscriber: () => true,
+    isQuantumSubscriber: () => true,
     isMaxSubscriber: () => true,
     isProSubscriber: () => false,
     isTeamPremiumSubscriber: () => false,
@@ -16,19 +16,19 @@ async function importFreshModelModule() {
       if (process.env.NVIDIA_NIM) return 'nvidia-nim'
       if (process.env.MINIMAX_API_KEY) return 'minimax'
       if (process.env.MIMO_API_KEY) return 'xiaomi-mimo'
-      if (process.env.CLAUDE_CODE_USE_GEMINI) return 'gemini'
-      if (process.env.CLAUDE_CODE_USE_MISTRAL) return 'mistral'
-      if (process.env.CLAUDE_CODE_USE_GITHUB) return 'github'
-      if (process.env.CLAUDE_CODE_USE_OPENAI) {
+      if (process.env.QUANTUM_USE_GEMINI) return 'gemini'
+      if (process.env.QUANTUM_USE_MISTRAL) return 'mistral'
+      if (process.env.QUANTUM_USE_GITHUB) return 'github'
+      if (process.env.QUANTUM_USE_OPENAI) {
         const baseUrl = process.env.OPENAI_BASE_URL ?? ''
         const model = process.env.OPENAI_MODEL ?? ''
         return baseUrl.includes('/backend-api/codex') || model.startsWith('codex')
           ? 'codex'
           : 'openai'
       }
-      if (process.env.CLAUDE_CODE_USE_BEDROCK) return 'bedrock'
-      if (process.env.CLAUDE_CODE_USE_VERTEX) return 'vertex'
-      if (process.env.CLAUDE_CODE_USE_FOUNDRY) return 'foundry'
+      if (process.env.QUANTUM_USE_BEDROCK) return 'bedrock'
+      if (process.env.QUANTUM_USE_VERTEX) return 'vertex'
+      if (process.env.QUANTUM_USE_FOUNDRY) return 'foundry'
       return 'firstParty'
     },
   }))
@@ -37,13 +37,13 @@ async function importFreshModelModule() {
 }
 
 const SAVED_ENV = {
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_USE_GEMINI: process.env.CLAUDE_CODE_USE_GEMINI,
-  CLAUDE_CODE_USE_GITHUB: process.env.CLAUDE_CODE_USE_GITHUB,
-  CLAUDE_CODE_USE_MISTRAL: process.env.CLAUDE_CODE_USE_MISTRAL,
-  CLAUDE_CODE_USE_BEDROCK: process.env.CLAUDE_CODE_USE_BEDROCK,
-  CLAUDE_CODE_USE_VERTEX: process.env.CLAUDE_CODE_USE_VERTEX,
-  CLAUDE_CODE_USE_FOUNDRY: process.env.CLAUDE_CODE_USE_FOUNDRY,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
+  QUANTUM_USE_GEMINI: process.env.QUANTUM_USE_GEMINI,
+  QUANTUM_USE_GITHUB: process.env.QUANTUM_USE_GITHUB,
+  QUANTUM_USE_MISTRAL: process.env.QUANTUM_USE_MISTRAL,
+  QUANTUM_USE_BEDROCK: process.env.QUANTUM_USE_BEDROCK,
+  QUANTUM_USE_VERTEX: process.env.QUANTUM_USE_VERTEX,
+  QUANTUM_USE_FOUNDRY: process.env.QUANTUM_USE_FOUNDRY,
   NVIDIA_NIM: process.env.NVIDIA_NIM,
   MINIMAX_API_KEY: process.env.MINIMAX_API_KEY,
   MIMO_API_KEY: process.env.MIMO_API_KEY,
@@ -67,13 +67,13 @@ beforeEach(() => {
   // globally. Without mock.restore() here, those overrides bleed into this
   // suite and the provider-kind branches we're testing become unreachable.
   mock.restore()
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_USE_GEMINI
-  delete process.env.CLAUDE_CODE_USE_GITHUB
-  delete process.env.CLAUDE_CODE_USE_MISTRAL
-  delete process.env.CLAUDE_CODE_USE_BEDROCK
-  delete process.env.CLAUDE_CODE_USE_VERTEX
-  delete process.env.CLAUDE_CODE_USE_FOUNDRY
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_USE_GEMINI
+  delete process.env.QUANTUM_USE_GITHUB
+  delete process.env.QUANTUM_USE_MISTRAL
+  delete process.env.QUANTUM_USE_BEDROCK
+  delete process.env.QUANTUM_USE_VERTEX
+  delete process.env.QUANTUM_USE_FOUNDRY
   delete process.env.NVIDIA_NIM
   delete process.env.MINIMAX_API_KEY
   delete process.env.MIMO_API_KEY
@@ -106,7 +106,7 @@ test('codex provider reads OPENAI_MODEL, not stale settings.model', async () => 
   // and returned settings.model='kimi-k2.6', causing Codex's API to reject
   // the request: "The 'kimi-k2.6' model is not supported when using Codex".
   saveGlobalConfig(current => ({ ...current, model: 'kimi-k2.6' }))
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://chatgpt.com/backend-api/codex'
   process.env.OPENAI_MODEL = 'codexplan'
   process.env.CODEX_API_KEY = 'codex-test'
@@ -120,7 +120,7 @@ test('codex provider reads OPENAI_MODEL, not stale settings.model', async () => 
 test('nvidia-nim provider reads OPENAI_MODEL, not stale settings.model', async () => {
   saveGlobalConfig(current => ({ ...current, model: 'kimi-k2.6' }))
   process.env.NVIDIA_NIM = '1'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_MODEL = 'nvidia/llama-3.1-nemotron-70b-instruct'
 
   const { getUserSpecifiedModelSetting } = await importFreshModelModule()
@@ -131,7 +131,7 @@ test('nvidia-nim provider reads OPENAI_MODEL, not stale settings.model', async (
 test('minimax provider reads OPENAI_MODEL, not stale settings.model', async () => {
   saveGlobalConfig(current => ({ ...current, model: 'kimi-k2.6' }))
   process.env.MINIMAX_API_KEY = 'minimax-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_MODEL = 'MiniMax-M2.5'
 
   const { getUserSpecifiedModelSetting } = await importFreshModelModule()
@@ -142,7 +142,7 @@ test('minimax provider reads OPENAI_MODEL, not stale settings.model', async () =
 test('xiaomi mimo provider reads OPENAI_MODEL, not stale settings.model', async () => {
   saveGlobalConfig(current => ({ ...current, model: 'opus' }))
   process.env.MIMO_API_KEY = 'mimo-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2.5-pro'
 
@@ -153,7 +153,7 @@ test('xiaomi mimo provider reads OPENAI_MODEL, not stale settings.model', async 
 
 test('openai provider still reads OPENAI_MODEL (regression guard)', async () => {
   saveGlobalConfig(current => ({ ...current, model: 'stale-default' }))
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_MODEL = 'gpt-4o'
 
   const { getUserSpecifiedModelSetting } = await importFreshModelModule()
@@ -163,7 +163,7 @@ test('openai provider still reads OPENAI_MODEL (regression guard)', async () => 
 
 test('github provider still reads OPENAI_MODEL (regression guard)', async () => {
   saveGlobalConfig(current => ({ ...current, model: 'stale-default' }))
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   process.env.OPENAI_MODEL = 'github:copilot'
 
   const { getUserSpecifiedModelSetting } = await importFreshModelModule()
@@ -187,7 +187,7 @@ test('getSmallFastModel returns OPENAI_MODEL for MiniMax (regression: WebFetch h
 })
 
 test('getSmallFastModel returns OPENAI_MODEL for Codex (regression)', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://chatgpt.com/backend-api/codex'
   process.env.OPENAI_MODEL = 'codexspark'
   process.env.CODEX_API_KEY = 'codex-test'
@@ -199,7 +199,7 @@ test('getSmallFastModel returns OPENAI_MODEL for Codex (regression)', async () =
 
 test('getSmallFastModel returns OPENAI_MODEL for NVIDIA NIM (regression)', async () => {
   process.env.NVIDIA_NIM = '1'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_MODEL = 'nvidia/llama-3.1-nemotron-70b-instruct'
 
   const { getSmallFastModel } = await importFreshModelModule()
@@ -208,7 +208,7 @@ test('getSmallFastModel returns OPENAI_MODEL for NVIDIA NIM (regression)', async
 
 test('getSmallFastModel returns OPENAI_MODEL for Xiaomi MiMo', async () => {
   process.env.MIMO_API_KEY = 'mimo-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2-flash'
 
@@ -237,7 +237,7 @@ test('getDefaultMainLoopModelSetting defaults MiniMax to M2.7', async () => {
 
 test('getDefaultMainLoopModelSetting defaults Xiaomi MiMo to mimo-v2.5-pro', async () => {
   process.env.MIMO_API_KEY = 'mimo-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
 
   const {
@@ -250,7 +250,7 @@ test('getDefaultMainLoopModelSetting defaults Xiaomi MiMo to mimo-v2.5-pro', asy
 
 test('modelDisplayString does not show Claude subscription default for Xiaomi MiMo', async () => {
   process.env.MIMO_API_KEY = 'mimo-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2.5-pro'
 
@@ -276,7 +276,7 @@ test('modelDisplayString does not show Claude subscription default for MiniMax',
 
 test('getDefaultSonnetModel returns OPENAI_MODEL for NVIDIA NIM', async () => {
   process.env.NVIDIA_NIM = '1'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_MODEL = 'nvidia/llama-3.1-nemotron-70b-instruct'
 
   const { getDefaultSonnetModel } = await importFreshModelModule()
@@ -318,7 +318,7 @@ test('default helpers do not leak claude-* names to shim providers', async () =>
 
 test('default helpers do not leak claude-* names to Xiaomi MiMo', async () => {
   process.env.MIMO_API_KEY = 'mimo-test'
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2.5-pro'
 
@@ -339,4 +339,3 @@ test('default helpers do not leak claude-* names to Xiaomi MiMo', async () => {
     expect(model.toLowerCase()).not.toContain('opus')
   }
 })
-

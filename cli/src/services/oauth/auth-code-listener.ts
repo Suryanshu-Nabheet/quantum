@@ -4,7 +4,7 @@ import type { AddressInfo } from 'net'
 import { logEvent } from 'src/services/analytics/index.js'
 import { getOauthConfig } from '../../constants/oauth.js'
 import { logError } from '../../utils/log.js'
-import { shouldUseClaudeAIAuth } from './client.js'
+import { shouldUseQuantumOAuth } from './client.js'
 
 /**
  * Temporary localhost HTTP server that listens for OAuth authorization code redirects.
@@ -132,7 +132,7 @@ export class AuthCodeListener {
     }
 
     // Default behavior: Choose success page based on granted permissions
-    const successUrl = shouldUseClaudeAIAuth(scopes)
+    const successUrl = shouldUseQuantumOAuth(scopes)
       ? getOauthConfig().CLAUDEAI_SUCCESS_URL
       : getOauthConfig().CONSOLE_SUCCESS_URL
 

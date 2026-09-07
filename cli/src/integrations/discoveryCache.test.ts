@@ -18,7 +18,7 @@ import {
   setOriginalFsImplementation,
 } from '../utils/fsOperations.js'
 
-const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
+const originalConfigDir = process.env.QUANTUM_CONFIG_DIR
 
 let tempDir: string
 
@@ -32,7 +32,7 @@ function createModel(id: string): ModelCatalogEntry {
 
 beforeEach(async () => {
   tempDir = mkdtempSync(join(tmpdir(), 'quantum-discovery-cache-test-'))
-  process.env.CLAUDE_CONFIG_DIR = tempDir
+  process.env.QUANTUM_CONFIG_DIR = tempDir
   setOriginalFsImplementation()
   await clearDiscoveryCache()
 })
@@ -40,9 +40,9 @@ beforeEach(async () => {
 afterEach(() => {
   setOriginalFsImplementation()
   if (originalConfigDir === undefined) {
-    delete process.env.CLAUDE_CONFIG_DIR
+    delete process.env.QUANTUM_CONFIG_DIR
   } else {
-    process.env.CLAUDE_CONFIG_DIR = originalConfigDir
+    process.env.QUANTUM_CONFIG_DIR = originalConfigDir
   }
   rmSync(tempDir, { recursive: true, force: true })
 })

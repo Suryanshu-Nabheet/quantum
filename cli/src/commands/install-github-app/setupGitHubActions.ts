@@ -41,11 +41,11 @@ async function createWorkflowFile(
   }
 
   let content = workflowContent
-  if (secretName === 'CLAUDE_CODE_OAUTH_TOKEN') {
+  if (secretName === 'QUANTUM_OAUTH_TOKEN') {
     // For OAuth tokens, use the claude_code_oauth_token parameter
     content = workflowContent.replace(
       /anthropic_api_key: \$\{\{ secrets\.ANTHROPIC_API_KEY \}\}/g,
-      `claude_code_oauth_token: \${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}`,
+      `claude_code_oauth_token: \${{ secrets.QUANTUM_OAUTH_TOKEN }}`,
     )
   } else if (secretName !== 'ANTHROPIC_API_KEY') {
     // For other custom secret names, keep using anthropic_api_key parameter
@@ -223,7 +223,7 @@ export async function setupGitHubActions(
 
       if (selectedWorkflows.includes('claude')) {
         workflows.push({
-          path: '.github/workflows/claude.yml',
+          path: '.github/workflows/quantum.yml',
           content: WORKFLOW_CONTENT,
           message: 'Quantum PR Assistant workflow',
         })
@@ -231,7 +231,7 @@ export async function setupGitHubActions(
 
       if (selectedWorkflows.includes('claude-review')) {
         workflows.push({
-          path: '.github/workflows/claude-code-review.yml',
+          path: '.github/workflows/quantum-review.yml',
           content: CODE_REVIEW_PLUGIN_WORKFLOW_CONTENT,
           message: 'Quantum CLI Review workflow',
         })

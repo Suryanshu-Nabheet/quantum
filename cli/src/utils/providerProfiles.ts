@@ -66,8 +66,8 @@ export type ProviderPresetDefaults = Omit<ProviderProfileInput, 'provider'> & {
   requiresApiKey: boolean
 }
 
-const PROFILE_ENV_APPLIED_FLAG = 'CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED'
-const PROFILE_ENV_APPLIED_ID = 'CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED_ID'
+const PROFILE_ENV_APPLIED_FLAG = 'QUANTUM_PROVIDER_PROFILE_ENV_APPLIED'
+const PROFILE_ENV_APPLIED_ID = 'QUANTUM_PROVIDER_PROFILE_ENV_APPLIED_ID'
 
 type ProfileCompatibilityMode =
   | 'anthropic'
@@ -316,20 +316,20 @@ function hasProviderSelectionFlags(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): boolean {
   return (
-    processEnv.CLAUDE_CODE_USE_OPENAI !== undefined ||
-    processEnv.CLAUDE_CODE_USE_GEMINI !== undefined ||
-    processEnv.CLAUDE_CODE_USE_MISTRAL !== undefined ||
-    processEnv.CLAUDE_CODE_USE_GITHUB !== undefined ||
-    processEnv.CLAUDE_CODE_USE_BEDROCK !== undefined ||
-    processEnv.CLAUDE_CODE_USE_VERTEX !== undefined ||
-    processEnv.CLAUDE_CODE_USE_FOUNDRY !== undefined
+    processEnv.QUANTUM_USE_OPENAI !== undefined ||
+    processEnv.QUANTUM_USE_GEMINI !== undefined ||
+    processEnv.QUANTUM_USE_MISTRAL !== undefined ||
+    processEnv.QUANTUM_USE_GITHUB !== undefined ||
+    processEnv.QUANTUM_USE_BEDROCK !== undefined ||
+    processEnv.QUANTUM_USE_VERTEX !== undefined ||
+    processEnv.QUANTUM_USE_FOUNDRY !== undefined
   )
 }
 
 /**
  * A "complete" explicit provider selection = a USE flag AND at least one
  * concrete config value that tells us WHERE to route (a base URL) or WHAT
- * to run (a model id). A bare `CLAUDE_CODE_USE_OPENAI=1` with nothing else
+ * to run (a model id). A bare `QUANTUM_USE_OPENAI=1` with nothing else
  * is almost always a stale shell export from a previous session, not real
  * intent — and if we respect it, we skip the user's saved active profile
  * and fall back to hardcoded defaults (gpt-4o / api.openai.com), which is
@@ -344,14 +344,14 @@ function hasCompleteProviderSelection(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): boolean {
   if (!hasProviderSelectionFlags(processEnv)) return false
-  if (processEnv.CLAUDE_CODE_USE_OPENAI !== undefined) {
+  if (processEnv.QUANTUM_USE_OPENAI !== undefined) {
     return (
       trimOrUndefined(processEnv.OPENAI_BASE_URL) !== undefined ||
       trimOrUndefined(processEnv.OPENAI_API_BASE) !== undefined ||
       trimOrUndefined(processEnv.OPENAI_MODEL) !== undefined
     )
   }
-  if (processEnv.CLAUDE_CODE_USE_GEMINI !== undefined) {
+  if (processEnv.QUANTUM_USE_GEMINI !== undefined) {
     return (
       trimOrUndefined(processEnv.GEMINI_BASE_URL) !== undefined ||
       trimOrUndefined(processEnv.GEMINI_MODEL) !== undefined ||
@@ -359,14 +359,14 @@ function hasCompleteProviderSelection(
       trimOrUndefined(processEnv.GOOGLE_API_KEY) !== undefined
     )
   }
-  if (processEnv.CLAUDE_CODE_USE_MISTRAL !== undefined) {
+  if (processEnv.QUANTUM_USE_MISTRAL !== undefined) {
     return (
       trimOrUndefined(processEnv.MISTRAL_BASE_URL) !== undefined ||
       trimOrUndefined(processEnv.MISTRAL_MODEL) !== undefined ||
       trimOrUndefined(processEnv.MISTRAL_API_KEY) !== undefined
     )
   }
-  if (processEnv.CLAUDE_CODE_USE_GITHUB !== undefined) {
+  if (processEnv.QUANTUM_USE_GITHUB !== undefined) {
     return (
       trimOrUndefined(processEnv.GITHUB_TOKEN) !== undefined ||
       trimOrUndefined(processEnv.GH_TOKEN) !== undefined ||
@@ -389,13 +389,13 @@ function hasConflictingProviderFlagsForProfile(
   }
 
   return (
-    (compatibilityMode !== 'openai' && processEnv.CLAUDE_CODE_USE_OPENAI !== undefined) ||
-    (compatibilityMode !== 'gemini' && processEnv.CLAUDE_CODE_USE_GEMINI !== undefined) ||
-    (compatibilityMode !== 'mistral' && processEnv.CLAUDE_CODE_USE_MISTRAL !== undefined) ||
-    (compatibilityMode !== 'github' && processEnv.CLAUDE_CODE_USE_GITHUB !== undefined) ||
-    (compatibilityMode !== 'bedrock' && processEnv.CLAUDE_CODE_USE_BEDROCK !== undefined) ||
-    (compatibilityMode !== 'vertex' && processEnv.CLAUDE_CODE_USE_VERTEX !== undefined) ||
-    processEnv.CLAUDE_CODE_USE_FOUNDRY !== undefined
+    (compatibilityMode !== 'openai' && processEnv.QUANTUM_USE_OPENAI !== undefined) ||
+    (compatibilityMode !== 'gemini' && processEnv.QUANTUM_USE_GEMINI !== undefined) ||
+    (compatibilityMode !== 'mistral' && processEnv.QUANTUM_USE_MISTRAL !== undefined) ||
+    (compatibilityMode !== 'github' && processEnv.QUANTUM_USE_GITHUB !== undefined) ||
+    (compatibilityMode !== 'bedrock' && processEnv.QUANTUM_USE_BEDROCK !== undefined) ||
+    (compatibilityMode !== 'vertex' && processEnv.QUANTUM_USE_VERTEX !== undefined) ||
+    processEnv.QUANTUM_USE_FOUNDRY !== undefined
   )
 }
 
@@ -436,13 +436,13 @@ function isProcessEnvAlignedWithProfile(
 
   if (compatibilityMode === 'mistral') {
     return (
-      processEnv.CLAUDE_CODE_USE_MISTRAL !== undefined &&
-      processEnv.CLAUDE_CODE_USE_GEMINI === undefined &&
-      processEnv.CLAUDE_CODE_USE_OPENAI === undefined &&
-      processEnv.CLAUDE_CODE_USE_GITHUB === undefined &&
-      processEnv.CLAUDE_CODE_USE_BEDROCK === undefined &&
-      processEnv.CLAUDE_CODE_USE_VERTEX === undefined &&
-      processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+      processEnv.QUANTUM_USE_MISTRAL !== undefined &&
+      processEnv.QUANTUM_USE_GEMINI === undefined &&
+      processEnv.QUANTUM_USE_OPENAI === undefined &&
+      processEnv.QUANTUM_USE_GITHUB === undefined &&
+      processEnv.QUANTUM_USE_BEDROCK === undefined &&
+      processEnv.QUANTUM_USE_VERTEX === undefined &&
+      processEnv.QUANTUM_USE_FOUNDRY === undefined &&
       sameOptionalEnvValue(processEnv.MISTRAL_BASE_URL, profile.baseUrl) &&
       sameOptionalEnvValue(processEnv.MISTRAL_MODEL, getPrimaryModel(profile.model)) &&
       (!includeApiKey ||
@@ -452,13 +452,13 @@ function isProcessEnvAlignedWithProfile(
 
   if (compatibilityMode === 'gemini') {
     return (
-      processEnv.CLAUDE_CODE_USE_GEMINI !== undefined &&
-      processEnv.CLAUDE_CODE_USE_MISTRAL === undefined &&
-      processEnv.CLAUDE_CODE_USE_OPENAI === undefined &&
-      processEnv.CLAUDE_CODE_USE_GITHUB === undefined &&
-      processEnv.CLAUDE_CODE_USE_BEDROCK === undefined &&
-      processEnv.CLAUDE_CODE_USE_VERTEX === undefined &&
-      processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+      processEnv.QUANTUM_USE_GEMINI !== undefined &&
+      processEnv.QUANTUM_USE_MISTRAL === undefined &&
+      processEnv.QUANTUM_USE_OPENAI === undefined &&
+      processEnv.QUANTUM_USE_GITHUB === undefined &&
+      processEnv.QUANTUM_USE_BEDROCK === undefined &&
+      processEnv.QUANTUM_USE_VERTEX === undefined &&
+      processEnv.QUANTUM_USE_FOUNDRY === undefined &&
       sameOptionalEnvValue(processEnv.GEMINI_BASE_URL, profile.baseUrl) &&
       sameOptionalEnvValue(processEnv.GEMINI_MODEL, getPrimaryModel(profile.model)) &&
       (!includeApiKey ||
@@ -468,13 +468,13 @@ function isProcessEnvAlignedWithProfile(
 
   if (compatibilityMode === 'github') {
     return (
-      processEnv.CLAUDE_CODE_USE_GITHUB !== undefined &&
-      processEnv.CLAUDE_CODE_USE_OPENAI === undefined &&
-      processEnv.CLAUDE_CODE_USE_GEMINI === undefined &&
-      processEnv.CLAUDE_CODE_USE_MISTRAL === undefined &&
-      processEnv.CLAUDE_CODE_USE_BEDROCK === undefined &&
-      processEnv.CLAUDE_CODE_USE_VERTEX === undefined &&
-      processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+      processEnv.QUANTUM_USE_GITHUB !== undefined &&
+      processEnv.QUANTUM_USE_OPENAI === undefined &&
+      processEnv.QUANTUM_USE_GEMINI === undefined &&
+      processEnv.QUANTUM_USE_MISTRAL === undefined &&
+      processEnv.QUANTUM_USE_BEDROCK === undefined &&
+      processEnv.QUANTUM_USE_VERTEX === undefined &&
+      processEnv.QUANTUM_USE_FOUNDRY === undefined &&
       sameOptionalEnvValue(processEnv.OPENAI_BASE_URL, profile.baseUrl) &&
       sameOptionalEnvValue(processEnv.OPENAI_MODEL, getPrimaryModel(profile.model))
     )
@@ -482,13 +482,13 @@ function isProcessEnvAlignedWithProfile(
 
   if (compatibilityMode === 'bedrock') {
     return (
-      processEnv.CLAUDE_CODE_USE_BEDROCK !== undefined &&
-      processEnv.CLAUDE_CODE_USE_OPENAI === undefined &&
-      processEnv.CLAUDE_CODE_USE_GEMINI === undefined &&
-      processEnv.CLAUDE_CODE_USE_MISTRAL === undefined &&
-      processEnv.CLAUDE_CODE_USE_GITHUB === undefined &&
-      processEnv.CLAUDE_CODE_USE_VERTEX === undefined &&
-      processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+      processEnv.QUANTUM_USE_BEDROCK !== undefined &&
+      processEnv.QUANTUM_USE_OPENAI === undefined &&
+      processEnv.QUANTUM_USE_GEMINI === undefined &&
+      processEnv.QUANTUM_USE_MISTRAL === undefined &&
+      processEnv.QUANTUM_USE_GITHUB === undefined &&
+      processEnv.QUANTUM_USE_VERTEX === undefined &&
+      processEnv.QUANTUM_USE_FOUNDRY === undefined &&
       sameOptionalEnvValue(processEnv.ANTHROPIC_MODEL, getPrimaryModel(profile.model)) &&
       sameOptionalEnvValue(processEnv.ANTHROPIC_BEDROCK_BASE_URL, profile.baseUrl)
     )
@@ -496,26 +496,26 @@ function isProcessEnvAlignedWithProfile(
 
   if (compatibilityMode === 'vertex') {
     return (
-      processEnv.CLAUDE_CODE_USE_VERTEX !== undefined &&
-      processEnv.CLAUDE_CODE_USE_OPENAI === undefined &&
-      processEnv.CLAUDE_CODE_USE_GEMINI === undefined &&
-      processEnv.CLAUDE_CODE_USE_MISTRAL === undefined &&
-      processEnv.CLAUDE_CODE_USE_GITHUB === undefined &&
-      processEnv.CLAUDE_CODE_USE_BEDROCK === undefined &&
-      processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+      processEnv.QUANTUM_USE_VERTEX !== undefined &&
+      processEnv.QUANTUM_USE_OPENAI === undefined &&
+      processEnv.QUANTUM_USE_GEMINI === undefined &&
+      processEnv.QUANTUM_USE_MISTRAL === undefined &&
+      processEnv.QUANTUM_USE_GITHUB === undefined &&
+      processEnv.QUANTUM_USE_BEDROCK === undefined &&
+      processEnv.QUANTUM_USE_FOUNDRY === undefined &&
       sameOptionalEnvValue(processEnv.ANTHROPIC_MODEL, getPrimaryModel(profile.model)) &&
       sameOptionalEnvValue(processEnv.ANTHROPIC_VERTEX_BASE_URL, profile.baseUrl)
     )
   }
 
   return (
-    processEnv.CLAUDE_CODE_USE_OPENAI !== undefined &&
-    processEnv.CLAUDE_CODE_USE_GEMINI === undefined &&
-    processEnv.CLAUDE_CODE_USE_MISTRAL === undefined &&
-    processEnv.CLAUDE_CODE_USE_GITHUB === undefined &&
-    processEnv.CLAUDE_CODE_USE_BEDROCK === undefined &&
-    processEnv.CLAUDE_CODE_USE_VERTEX === undefined &&
-    processEnv.CLAUDE_CODE_USE_FOUNDRY === undefined &&
+    processEnv.QUANTUM_USE_OPENAI !== undefined &&
+    processEnv.QUANTUM_USE_GEMINI === undefined &&
+    processEnv.QUANTUM_USE_MISTRAL === undefined &&
+    processEnv.QUANTUM_USE_GITHUB === undefined &&
+    processEnv.QUANTUM_USE_BEDROCK === undefined &&
+    processEnv.QUANTUM_USE_VERTEX === undefined &&
+    processEnv.QUANTUM_USE_FOUNDRY === undefined &&
     sameOptionalEnvValue(processEnv.OPENAI_BASE_URL, profile.baseUrl) &&
     sameOptionalEnvValue(processEnv.OPENAI_MODEL, getPrimaryModel(profile.model)) &&
     sameOptionalEnvValue(processEnv.OPENAI_API_FORMAT, profile.apiFormat) &&
@@ -708,7 +708,7 @@ export function applyActiveProviderProfileFromConfig(
     // Respect explicit startup provider intent. Auto-heal only when this
     // exact active profile previously applied the current env.
     // NOTE: we gate on hasCompleteProviderSelection (flag + concrete config)
-    // rather than hasProviderSelectionFlags alone. A bare CLAUDE_CODE_USE_*=1
+    // rather than hasProviderSelectionFlags alone. A bare QUANTUM_USE_*=1
     // with no BASE_URL/MODEL is almost always a stale shell export, not
     // intent — respecting it would skip the saved profile and fall through
     // to hardcoded provider defaults, which surfaces as "my saved provider

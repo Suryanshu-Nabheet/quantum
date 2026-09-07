@@ -5,7 +5,7 @@ import {
   getAnthropicApiKeyWithSource,
   getApiKeyFromApiKeyHelper,
   isAnthropicAuthEnabled,
-  isClaudeAISubscriber,
+  isQuantumSubscriber,
 } from '../utils/auth.js'
 
 export type VerificationStatus =
@@ -22,7 +22,7 @@ export type ApiKeyVerificationResult = {
 }
 
 function getInitialVerificationStatus(): VerificationStatus {
-  if (!isAnthropicAuthEnabled() || isClaudeAISubscriber()) {
+  if (!isAnthropicAuthEnabled() || isQuantumSubscriber()) {
     return 'valid'
   }
   // Use skipRetrievingKeyFromApiKeyHelper to avoid executing apiKeyHelper
@@ -44,7 +44,7 @@ export function useApiKeyVerification(): ApiKeyVerificationResult {
   )
   const [error, setError] = useState<Error | null>(null)
   const anthropicVerificationEnabled =
-    isAnthropicAuthEnabled() && !isClaudeAISubscriber()
+    isAnthropicAuthEnabled() && !isQuantumSubscriber()
 
   useEffect(() => {
     const nextStatus = anthropicVerificationEnabled
@@ -60,7 +60,7 @@ export function useApiKeyVerification(): ApiKeyVerificationResult {
   }, [anthropicVerificationEnabled])
 
   const verify = useCallback(async (): Promise<void> => {
-    if (!isAnthropicAuthEnabled() || isClaudeAISubscriber()) {
+    if (!isAnthropicAuthEnabled() || isQuantumSubscriber()) {
       setStatus('valid')
       return
     }

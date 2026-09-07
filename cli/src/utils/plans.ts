@@ -25,7 +25,7 @@ import { generateWordSlug } from './words.js'
 const MAX_SLUG_RETRIES = 10
 
 export function getDefaultPlansDirectory({
-  configDirEnv = process.env.CLAUDE_CONFIG_DIR,
+  configDirEnv = process.env.QUANTUM_CONFIG_DIR,
   homeDir = homedir(),
 }: {
   configDirEnv?: string

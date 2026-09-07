@@ -7,12 +7,12 @@ import {
 } from './context.ts'
 
 const originalEnv = {
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_MAX_OUTPUT_TOKENS: process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS,
-  CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS:
-    process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS,
-  CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS:
-    process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
+  QUANTUM_MAX_OUTPUT_TOKENS: process.env.QUANTUM_MAX_OUTPUT_TOKENS,
+  QUANTUM_OPENAI_CONTEXT_WINDOWS:
+    process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS,
+  QUANTUM_OPENAI_MAX_OUTPUT_TOKENS:
+    process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS,
   OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
   OPENAI_API_BASE: process.env.OPENAI_API_BASE,
   OPENAI_MODEL: process.env.OPENAI_MODEL,
@@ -21,10 +21,10 @@ const originalEnv = {
 }
 
 beforeEach(() => {
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
-  delete process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS
-  delete process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS
+  delete process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_BASE_URL
   delete process.env.OPENAI_API_BASE
   delete process.env.OPENAI_MODEL
@@ -33,28 +33,28 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  if (originalEnv.CLAUDE_CODE_USE_OPENAI === undefined) {
-    delete process.env.CLAUDE_CODE_USE_OPENAI
+  if (originalEnv.QUANTUM_USE_OPENAI === undefined) {
+    delete process.env.QUANTUM_USE_OPENAI
   } else {
-    process.env.CLAUDE_CODE_USE_OPENAI = originalEnv.CLAUDE_CODE_USE_OPENAI
+    process.env.QUANTUM_USE_OPENAI = originalEnv.QUANTUM_USE_OPENAI
   }
-  if (originalEnv.CLAUDE_CODE_MAX_OUTPUT_TOKENS === undefined) {
-    delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  if (originalEnv.QUANTUM_MAX_OUTPUT_TOKENS === undefined) {
+    delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   } else {
-    process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS =
-      originalEnv.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+    process.env.QUANTUM_MAX_OUTPUT_TOKENS =
+      originalEnv.QUANTUM_MAX_OUTPUT_TOKENS
   }
-  if (originalEnv.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS === undefined) {
-    delete process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS
+  if (originalEnv.QUANTUM_OPENAI_CONTEXT_WINDOWS === undefined) {
+    delete process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS
   } else {
-    process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS =
-      originalEnv.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS
+    process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS =
+      originalEnv.QUANTUM_OPENAI_CONTEXT_WINDOWS
   }
-  if (originalEnv.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS === undefined) {
-    delete process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS
+  if (originalEnv.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS === undefined) {
+    delete process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS
   } else {
-    process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS =
-      originalEnv.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS
+    process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS =
+      originalEnv.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS
   }
   if (originalEnv.OPENAI_MODEL === undefined) {
     delete process.env.OPENAI_MODEL
@@ -84,8 +84,8 @@ afterEach(() => {
 })
 
 test('deepseek-v4-flash uses the gateway-safe output cap by default', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('deepseek-v4-flash')).toBe(1_048_576)
@@ -97,9 +97,9 @@ test('deepseek-v4-flash uses the gateway-safe output cap by default', () => {
 })
 
 test('deepseek-v4-flash uses DeepSeek direct API max output cap on api.deepseek.com', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.deepseek.com/v1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('deepseek-v4-flash')).toBe(1_048_576)
@@ -111,8 +111,8 @@ test('deepseek-v4-flash uses DeepSeek direct API max output cap on api.deepseek.
 })
 
 test('deepseek-v4-pro uses the gateway-safe output cap by default', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('deepseek-v4-pro')).toBe(1_048_576)
@@ -124,9 +124,9 @@ test('deepseek-v4-pro uses the gateway-safe output cap by default', () => {
 })
 
 test('deepseek-v4-pro uses DeepSeek direct API max output cap on api.deepseek.com', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.deepseek.com/v1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('deepseek-v4-pro')).toBe(1_048_576)
@@ -138,9 +138,9 @@ test('deepseek-v4-pro uses DeepSeek direct API max output cap on api.deepseek.co
 })
 
 test('deepseek-v4-pro keeps gateway routes on the lower output cap', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getModelMaxOutputTokens('deepseek-v4-pro')).toEqual({
@@ -151,8 +151,8 @@ test('deepseek-v4-pro keeps gateway routes on the lower output cap', () => {
 })
 
 test('deepseek legacy aliases keep their documented provider caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('deepseek-chat')).toBe(128_000)
@@ -162,25 +162,25 @@ test('deepseek legacy aliases keep their documented provider caps', () => {
 })
 
 test('deepseek-v4-pro clamps oversized max output overrides to the provider limit', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS = '500000'
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_MAX_OUTPUT_TOKENS = '500000'
   delete process.env.OPENAI_MODEL
 
   expect(getMaxOutputTokensForModel('deepseek-v4-pro')).toBe(65_536)
 })
 
 test('deepseek-v4-flash clamps oversized max output overrides to the provider limit', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.deepseek.com/v1'
-  process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS = '500000'
+  process.env.QUANTUM_MAX_OUTPUT_TOKENS = '500000'
   delete process.env.OPENAI_MODEL
 
   expect(getMaxOutputTokensForModel('deepseek-v4-flash')).toBe(393_216)
 })
 
 test('gpt-4o uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('gpt-4o')).toBe(128_000)
@@ -192,16 +192,16 @@ test('gpt-4o uses provider-specific context and output caps', () => {
 })
 
 test('gpt-4o clamps oversized max output overrides to the provider limit', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS = '32000'
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_MAX_OUTPUT_TOKENS = '32000'
   delete process.env.OPENAI_MODEL
 
   expect(getMaxOutputTokensForModel('gpt-4o')).toBe(16_384)
 })
 
 test('gpt-5.5 uses conservative Codex-route context window (issue #1118)', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   // gpt-5.5 is primarily routed through the Codex transport in this repo
@@ -213,8 +213,8 @@ test('gpt-5.5 uses conservative Codex-route context window (issue #1118)', () =>
 })
 
 test('gpt-5.4 family uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('gpt-5.4')).toBe(1_050_000)
@@ -237,8 +237,8 @@ test('gpt-5.4 family uses provider-specific context and output caps', () => {
 })
 
 test('gpt-5.4 family keeps large max output overrides within provider limits', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS = '200000'
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_MAX_OUTPUT_TOKENS = '200000'
 
   expect(getMaxOutputTokensForModel('gpt-5.4')).toBe(128_000)
   expect(getMaxOutputTokensForModel('gpt-5.4-mini')).toBe(128_000)
@@ -246,8 +246,8 @@ test('gpt-5.4 family keeps large max output overrides within provider limits', (
 })
 
 test('MiniMax-M2.7 uses explicit provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('MiniMax-M2.7')).toBe(204_800)
@@ -260,8 +260,8 @@ test('MiniMax-M2.7 uses explicit provider-specific context and output caps', () 
 
 test('env-only MiniMax key uses provider-specific context and output caps before client setup', () => {
   process.env.MINIMAX_API_KEY = 'minimax-test-key'
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('MiniMax-M2.7')).toBe(204_800)
@@ -274,8 +274,8 @@ test('env-only MiniMax key uses provider-specific context and output caps before
 
 test('env-only xAI key uses provider-specific context and output caps before client setup', () => {
   process.env.XAI_API_KEY = 'xai-test-key'
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('grok-4.3')).toBe(1_000_000)
@@ -293,19 +293,19 @@ test('env-only xAI key uses provider-specific context and output caps before cli
 })
 
 test('unknown openai-compatible models use the 128k fallback window (not 8k, see #635)', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('some-unknown-3p-model')).toBe(128_000)
 })
 
 test('OpenAI-compatible custom model limits honor documented env overrides', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
     'custom-model': 262_144,
   })
-  process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
     'custom-model': 12_288,
   })
 
@@ -317,11 +317,11 @@ test('OpenAI-compatible custom model limits honor documented env overrides', () 
 })
 
 test('OpenAI-compatible env overrides take precedence over integration metadata', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
     'gpt-4o': 64_000,
   })
-  process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
     'gpt-4o': 4_096,
   })
 
@@ -333,13 +333,13 @@ test('OpenAI-compatible env overrides take precedence over integration metadata'
 })
 
 test('OpenAI-compatible host-qualified env overrides beat generic overrides', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.foo.com/v1'
-  process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
     'gpt-4o': 128_000,
     'api.foo.com:gpt-4o': 64_000,
   })
-  process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
     'gpt-4o': 16_384,
     'api.foo.com:gpt-4o': 4_096,
   })
@@ -352,13 +352,13 @@ test('OpenAI-compatible host-qualified env overrides beat generic overrides', ()
 })
 
 test('OpenAI-compatible host-qualified env overrides honor OPENAI_API_BASE', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_API_BASE = 'https://legacy.foo.com/v1'
-  process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
     'gpt-4o': 128_000,
     'legacy.foo.com:gpt-4o': 96_000,
   })
-  process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
     'gpt-4o': 16_384,
     'legacy.foo.com:gpt-4o': 8_192,
   })
@@ -371,13 +371,13 @@ test('OpenAI-compatible host-qualified env overrides honor OPENAI_API_BASE', () 
 })
 
 test('OpenAI-compatible exact env overrides beat host-qualified prefixes', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.foo.com/v1'
-  process.env.CLAUDE_CODE_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_CONTEXT_WINDOWS = JSON.stringify({
     'api.foo.com:gpt-4': 8_192,
     'gpt-4o': 128_000,
   })
-  process.env.CLAUDE_CODE_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
+  process.env.QUANTUM_OPENAI_MAX_OUTPUT_TOKENS = JSON.stringify({
     'api.foo.com:gpt-4': 1_024,
     'gpt-4o': 16_384,
   })
@@ -390,8 +390,8 @@ test('OpenAI-compatible exact env overrides beat host-qualified prefixes', () =>
 })
 
 test('OpenAI-compatible legacy aliases keep their migrated limits', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen2.5-coder:32b')).toBe(32_768)
   expect(getModelMaxOutputTokens('qwen2.5-coder:32b')).toEqual({
@@ -411,8 +411,8 @@ test('OpenAI-compatible legacy aliases keep their migrated limits', () => {
 })
 
 test('MiniMax-M2.5 and M2.1 use explicit provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
   delete process.env.OPENAI_MODEL
 
   expect(getContextWindowForModel('MiniMax-M2.5')).toBe(204_800)
@@ -426,8 +426,8 @@ test('MiniMax-M2.5 and M2.1 use explicit provider-specific context and output ca
 })
 
 test('DashScope qwen3.6-plus uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3.6-plus')).toBe(1_000_000)
   expect(getModelMaxOutputTokens('qwen3.6-plus')).toEqual({
@@ -438,8 +438,8 @@ test('DashScope qwen3.6-plus uses provider-specific context and output caps', ()
 })
 
 test('DashScope qwen3.5-plus uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3.5-plus')).toBe(1_000_000)
   expect(getModelMaxOutputTokens('qwen3.5-plus')).toEqual({
@@ -450,8 +450,8 @@ test('DashScope qwen3.5-plus uses provider-specific context and output caps', ()
 })
 
 test('DashScope qwen3-coder-plus uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3-coder-plus')).toBe(1_000_000)
   expect(getModelMaxOutputTokens('qwen3-coder-plus')).toEqual({
@@ -461,8 +461,8 @@ test('DashScope qwen3-coder-plus uses provider-specific context and output caps'
 })
 
 test('DashScope qwen3-coder-next uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3-coder-next')).toBe(262_144)
   expect(getModelMaxOutputTokens('qwen3-coder-next')).toEqual({
@@ -472,8 +472,8 @@ test('DashScope qwen3-coder-next uses provider-specific context and output caps'
 })
 
 test('DashScope qwen3-max uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3-max')).toBe(262_144)
   expect(getModelMaxOutputTokens('qwen3-max')).toEqual({
@@ -483,8 +483,8 @@ test('DashScope qwen3-max uses provider-specific context and output caps', () =>
 })
 
 test('DashScope qwen3-max dated variant resolves to base entry via prefix match', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('qwen3-max-2026-01-23')).toBe(262_144)
   expect(getModelMaxOutputTokens('qwen3-max-2026-01-23')).toEqual({
@@ -494,8 +494,8 @@ test('DashScope qwen3-max dated variant resolves to base entry via prefix match'
 })
 
 test('DashScope kimi-k2.5 uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('kimi-k2.5')).toBe(262_144)
   expect(getModelMaxOutputTokens('kimi-k2.5')).toEqual({
@@ -505,8 +505,8 @@ test('DashScope kimi-k2.5 uses provider-specific context and output caps', () =>
 })
 
 test('Kimi Code kimi-for-coding uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('kimi-for-coding')).toBe(262_144)
   expect(getModelMaxOutputTokens('kimi-for-coding')).toEqual({
@@ -516,8 +516,8 @@ test('Kimi Code kimi-for-coding uses provider-specific context and output caps',
 })
 
 test('DashScope glm-5 uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('glm-5')).toBe(202_752)
   expect(getModelMaxOutputTokens('glm-5')).toEqual({
@@ -527,8 +527,8 @@ test('DashScope glm-5 uses provider-specific context and output caps', () => {
 })
 
 test('DashScope glm-4.7 uses provider-specific context and output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('glm-4.7')).toBe(202_752)
   expect(getModelMaxOutputTokens('glm-4.7')).toEqual({
@@ -538,8 +538,8 @@ test('DashScope glm-4.7 uses provider-specific context and output caps', () => {
 })
 
 test('Z.AI uppercase GLM models use Coding Plan output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getContextWindowForModel('GLM-5.1')).toBe(202_752)
   expect(getModelMaxOutputTokens('GLM-5.1')).toEqual({
@@ -557,8 +557,8 @@ test('Z.AI uppercase GLM models use Coding Plan output caps', () => {
 })
 
 test('lowercase GLM aliases keep conservative output caps', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  delete process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS
+  process.env.QUANTUM_USE_OPENAI = '1'
+  delete process.env.QUANTUM_MAX_OUTPUT_TOKENS
 
   expect(getModelMaxOutputTokens('glm-5.1')).toEqual({
     default: 16_384,
@@ -575,8 +575,8 @@ test('lowercase GLM aliases keep conservative output caps', () => {
 })
 
 test('DashScope models clamp oversized max output overrides to the provider limit', () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
-  process.env.CLAUDE_CODE_MAX_OUTPUT_TOKENS = '100000'
+  process.env.QUANTUM_USE_OPENAI = '1'
+  process.env.QUANTUM_MAX_OUTPUT_TOKENS = '100000'
 
   expect(getMaxOutputTokensForModel('qwen3.6-plus')).toBe(65_536)
   expect(getMaxOutputTokensForModel('qwen3.5-plus')).toBe(65_536)

@@ -10,13 +10,13 @@ import {
 } from './permissions/filesystem.ts'
 import { getValidationTip } from './settings/validationTips.ts'
 
-const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
+const originalConfigDir = process.env.QUANTUM_CONFIG_DIR
 
 afterEach(() => {
   if (originalConfigDir === undefined) {
-    delete process.env.CLAUDE_CONFIG_DIR
+    delete process.env.QUANTUM_CONFIG_DIR
   } else {
-    process.env.CLAUDE_CONFIG_DIR = originalConfigDir
+    process.env.QUANTUM_CONFIG_DIR = originalConfigDir
   }
 })
 
@@ -58,7 +58,7 @@ describe('Quantum settings path surfaces', () => {
   })
 
   test('permission dialog treats ~/.quantum as the global Claude folder', () => {
-    process.env.CLAUDE_CONFIG_DIR = join(homedir(), '.quantum')
+    process.env.QUANTUM_CONFIG_DIR = join(homedir(), '.quantum')
 
     expect(
       isInGlobalClaudeFolder(
@@ -70,8 +70,8 @@ describe('Quantum settings path surfaces', () => {
     ).toBe(true)
   })
 
-  test('permission dialog does not treat arbitrary CLAUDE_CONFIG_DIR as the global Claude folder', () => {
-    process.env.CLAUDE_CONFIG_DIR = join(homedir(), 'custom-quantum')
+  test('permission dialog does not treat arbitrary QUANTUM_CONFIG_DIR as the global Claude folder', () => {
+    process.env.QUANTUM_CONFIG_DIR = join(homedir(), 'custom-quantum')
 
     expect(
       isInGlobalClaudeFolder(
@@ -80,8 +80,8 @@ describe('Quantum settings path surfaces', () => {
     ).toBe(false)
   })
 
-  test('global skill scope recognizes ~/.quantum and legacy ~/.claude skills', () => {
-    process.env.CLAUDE_CONFIG_DIR = join(homedir(), '.quantum')
+  test('global skill scope recognizes ~/.quantum and legacy ~/.quantum skills', () => {
+    process.env.QUANTUM_CONFIG_DIR = join(homedir(), '.quantum')
 
     expect(
       getClaudeSkillScope(
@@ -98,12 +98,12 @@ describe('Quantum settings path surfaces', () => {
       ),
     ).toEqual({
       skillName: 'legacy',
-      pattern: '~/.claude/skills/legacy/**',
+      pattern: '~/.quantum/skills/legacy/**',
     })
   })
 
-  test('global skill scope does not emit fixed rules for arbitrary CLAUDE_CONFIG_DIR skills', () => {
-    process.env.CLAUDE_CONFIG_DIR = join(homedir(), 'custom-quantum')
+  test('global skill scope does not emit fixed rules for arbitrary QUANTUM_CONFIG_DIR skills', () => {
+    process.env.QUANTUM_CONFIG_DIR = join(homedir(), 'custom-quantum')
 
     expect(
       getClaudeSkillScope(

@@ -29,7 +29,7 @@ export function isInClaudeFolder(filePath: string): boolean {
 
 /**
  * Check if a path is within the global ~/.quantum/ folder, or the legacy
- * ~/.claude/ folder during migration.
+ * ~/.quantum/ folder during migration.
  * This is used to determine whether to show the special ".claude folder" permission option
  * for files in the user's home directory.
  */

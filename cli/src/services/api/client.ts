@@ -4,8 +4,8 @@ import {
   checkAndRefreshOAuthTokenIfNeeded,
   getAnthropicApiKey,
   getApiKeyFromApiKeyHelper,
-  getClaudeAIOAuthTokens,
-  isClaudeAISubscriber,
+  getQuantumOAuthTokens,
+  isQuantumSubscriber,
   refreshAndGetAwsCredentials,
   refreshGcpCredentialsIfNeeded,
 } from 'src/utils/auth.js'
@@ -137,7 +137,7 @@ function applyMiniMaxEnvOnlyDefaults(): void {
   const hasMiniMaxBaseOverride = baseUrlOverride !== undefined
   const modelOverride = process.env.OPENAI_MODEL?.trim() || undefined
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL =
     baseUrlOverride ?? getRouteDefaultBaseUrl('minimax')
   process.env.OPENAI_MODEL =
@@ -157,7 +157,7 @@ function applyXiaomiMimoEnvOnlyDefaults(): void {
   const hasBaseOverride = baseUrlOverride !== undefined
   const modelOverride = process.env.OPENAI_MODEL?.trim() || undefined
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL =
     baseUrlOverride ?? getRouteDefaultBaseUrl('xiaomi-mimo')
   process.env.OPENAI_MODEL =
@@ -177,7 +177,7 @@ function applyXaiEnvOnlyDefaults(): void {
   const hasXaiBaseOverride = baseUrlOverride !== undefined
   const modelOverride = process.env.OPENAI_MODEL?.trim() || undefined
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL =
     baseUrlOverride ?? getRouteDefaultBaseUrl('xai')
   process.env.OPENAI_MODEL =
@@ -215,8 +215,8 @@ export async function getAnthropicClient({
     effortValue !== undefined
       ? standardEffortToOpenAI(convertEffortValueToLevel(effortValue))
       : undefined
-  const containerId = process.env.CLAUDE_CODE_CONTAINER_ID
-  const remoteSessionId = process.env.CLAUDE_CODE_REMOTE_SESSION_ID
+  const containerId = process.env.QUANTUM_CONTAINER_ID
+  const remoteSessionId = process.env.QUANTUM_REMOTE_SESSION_ID
   const clientApp = process.env.CLAUDE_AGENT_SDK_CLIENT_APP
   const customHeaders = getCustomHeaders()
   const defaultHeaders: { [key: string]: string } = {
@@ -239,7 +239,7 @@ export async function getAnthropicClient({
 
   // Add additional protection header if enabled via env var
   const additionalProtectionEnabled = isEnvTruthy(
-    process.env.CLAUDE_CODE_ADDITIONAL_PROTECTION,
+    process.env.QUANTUM_ADDITIONAL_PROTECTION,
   )
   if (additionalProtectionEnabled) {
     defaultHeaders['x-anthropic-additional-protection'] = 'true'
@@ -254,10 +254,10 @@ export async function getAnthropicClient({
     logForDebugging('[API:auth] OAuth token check complete')
   }
 
-  const isClaudeAiSubscriber =
-    shouldUseFirstPartyAuth && isClaudeAISubscriber()
+  const isQuantumSubscriber =
+    shouldUseFirstPartyAuth && isQuantumSubscriber()
 
-  if (shouldUseFirstPartyAuth && !isClaudeAiSubscriber) {
+  if (shouldUseFirstPartyAuth && !isQuantumSubscriber) {
     await configureApiKeyHeaders(defaultHeaders, getIsNonInteractiveSession())
   }
 
@@ -297,7 +297,7 @@ export async function getAnthropicClient({
   // GitHub provider in native Anthropic API mode: send requests in Anthropic
   // format so cache_control blocks are honoured and prompt caching works.
   // Requires the GitHub endpoint (OPENAI_BASE_URL) to support Anthropic's
-  // messages API — set CLAUDE_CODE_GITHUB_ANTHROPIC_API=1 to opt in.
+  // messages API — set QUANTUM_GITHUB_ANTHROPIC_API=1 to opt in.
   if (isGithubNativeAnthropicMode(model)) {
     const githubBaseUrl =
       process.env.OPENAI_BASE_URL?.replace(/\/$/, '') ??
@@ -331,10 +331,10 @@ export async function getAnthropicClient({
     useMiniMaxEnvOnlyProvider ||
     useXiaomiMimoEnvOnlyProvider ||
     useXaiEnvOnlyProvider ||
-    isEnvTruthy(process.env.CLAUDE_CODE_USE_OPENAI) ||
-    isEnvTruthy(process.env.CLAUDE_CODE_USE_GITHUB) ||
-    isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI) ||
-    isEnvTruthy(process.env.CLAUDE_CODE_USE_MISTRAL)
+    isEnvTruthy(process.env.QUANTUM_USE_OPENAI) ||
+    isEnvTruthy(process.env.QUANTUM_USE_GITHUB) ||
+    isEnvTruthy(process.env.QUANTUM_USE_GEMINI) ||
+    isEnvTruthy(process.env.QUANTUM_USE_MISTRAL)
   ) {
     const { createOpenAIShimClient } = await import('./openaiShim.js')
     return createOpenAIShimClient({
@@ -344,7 +344,7 @@ export async function getAnthropicClient({
       reasoningEffort: shimReasoningEffort,
     }) as unknown as Anthropic
   }
-  if (isEnvTruthy(process.env.CLAUDE_CODE_USE_BEDROCK)) {
+  if (isEnvTruthy(process.env.QUANTUM_USE_BEDROCK)) {
     const { AnthropicBedrock } = await import('@anthropic-ai/bedrock-sdk')
     // Use region override for small fast model if specified
     const awsRegion =
@@ -356,7 +356,7 @@ export async function getAnthropicClient({
     const bedrockArgs: ConstructorParameters<typeof AnthropicBedrock>[0] = {
       ...ARGS,
       awsRegion,
-      ...(isEnvTruthy(process.env.CLAUDE_CODE_SKIP_BEDROCK_AUTH) && {
+      ...(isEnvTruthy(process.env.QUANTUM_SKIP_BEDROCK_AUTH) && {
         skipAuth: true,
       }),
       ...(isDebugToStdErr() && { logger: createStderrLogger() }),
@@ -370,7 +370,7 @@ export async function getAnthropicClient({
         ...bedrockArgs.defaultHeaders,
         Authorization: `Bearer ${process.env.AWS_BEARER_TOKEN_BEDROCK}`,
       }
-    } else if (!isEnvTruthy(process.env.CLAUDE_CODE_SKIP_BEDROCK_AUTH)) {
+    } else if (!isEnvTruthy(process.env.QUANTUM_SKIP_BEDROCK_AUTH)) {
       // Refresh auth and get credentials with cache clearing
       const cachedCredentials = await refreshAndGetAwsCredentials()
       if (cachedCredentials) {
@@ -382,7 +382,7 @@ export async function getAnthropicClient({
     // we have always been lying about the return type - this doesn't support batching or models
     return new AnthropicBedrock(bedrockArgs) as unknown as Anthropic
   }
-  if (isEnvTruthy(process.env.CLAUDE_CODE_USE_FOUNDRY)) {
+  if (isEnvTruthy(process.env.QUANTUM_USE_FOUNDRY)) {
     const { AnthropicFoundry } = await importRuntimeModule(
       '@anthropic-ai/foundry-sdk',
     )
@@ -390,7 +390,7 @@ export async function getAnthropicClient({
     // SDK reads ANTHROPIC_FOUNDRY_API_KEY by default
     let azureADTokenProvider: (() => Promise<string>) | undefined
     if (!process.env.ANTHROPIC_FOUNDRY_API_KEY) {
-      if (isEnvTruthy(process.env.CLAUDE_CODE_SKIP_FOUNDRY_AUTH)) {
+      if (isEnvTruthy(process.env.QUANTUM_SKIP_FOUNDRY_AUTH)) {
         // Mock token provider for testing/proxy scenarios (similar to Vertex mock GoogleAuth)
         azureADTokenProvider = () => Promise.resolve('')
       } else {
@@ -414,10 +414,10 @@ export async function getAnthropicClient({
     // we have always been lying about the return type - this doesn't support batching or models
     return new AnthropicFoundry(foundryArgs) as unknown as Anthropic
   }
-  if (isEnvTruthy(process.env.CLAUDE_CODE_USE_VERTEX)) {
+  if (isEnvTruthy(process.env.QUANTUM_USE_VERTEX)) {
     // Refresh GCP credentials if gcpAuthRefresh is configured and credentials are expired
     // This is similar to how we handle AWS credential refresh for Bedrock
-    if (!isEnvTruthy(process.env.CLAUDE_CODE_SKIP_VERTEX_AUTH)) {
+    if (!isEnvTruthy(process.env.QUANTUM_SKIP_VERTEX_AUTH)) {
       await refreshGcpCredentialsIfNeeded()
     }
 
@@ -459,7 +459,7 @@ export async function getAnthropicClient({
       process.env['GOOGLE_APPLICATION_CREDENTIALS'] ||
       process.env['google_application_credentials']
 
-    const googleAuth = isEnvTruthy(process.env.CLAUDE_CODE_SKIP_VERTEX_AUTH)
+    const googleAuth = isEnvTruthy(process.env.QUANTUM_SKIP_VERTEX_AUTH)
       ? ({
           // Mock GoogleAuth for testing/proxy scenarios
           getClient: () => ({
@@ -499,9 +499,9 @@ export async function getAnthropicClient({
 
   // Determine authentication method based on available tokens
   const clientConfig: ConstructorParameters<typeof Anthropic>[0] = {
-    apiKey: isClaudeAiSubscriber ? null : apiKey || getAnthropicApiKey(),
-    authToken: isClaudeAiSubscriber
-      ? getClaudeAIOAuthTokens()?.accessToken
+    apiKey: isQuantumSubscriber ? null : apiKey || getAnthropicApiKey(),
+    authToken: isQuantumSubscriber
+      ? getQuantumOAuthTokens()?.accessToken
       : undefined,
     // Set baseURL from OAuth config when using staging OAuth
     ...(process.env.USER_TYPE === 'ant' &&

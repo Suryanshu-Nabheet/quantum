@@ -9,14 +9,14 @@ import { PRODUCT_DISPLAY_NAME } from './product.js'
 
 const DEFAULT_PREFIX =
   `You are ${PRODUCT_DISPLAY_NAME}, an open-source coding agent and CLI.`
-const AGENT_SDK_CLAUDE_CODE_PRESET_PREFIX =
+const AGENT_SDK_QUANTUM_PRESET_PREFIX =
   `You are ${PRODUCT_DISPLAY_NAME}, an open-source coding agent and CLI running in non-interactive SDK mode.`
 const AGENT_SDK_PREFIX =
   `You are ${PRODUCT_DISPLAY_NAME}, a programmable coding agent.`
 
 const CLI_SYSPROMPT_PREFIX_VALUES = [
   DEFAULT_PREFIX,
-  AGENT_SDK_CLAUDE_CODE_PRESET_PREFIX,
+  AGENT_SDK_QUANTUM_PRESET_PREFIX,
   AGENT_SDK_PREFIX,
 ] as const
 
@@ -41,7 +41,7 @@ export function getCLISyspromptPrefix(options?: {
 
   if (options?.isNonInteractive) {
     if (options.hasAppendSystemPrompt) {
-      return AGENT_SDK_CLAUDE_CODE_PRESET_PREFIX
+      return AGENT_SDK_QUANTUM_PRESET_PREFIX
     }
     return AGENT_SDK_PREFIX
   }
@@ -53,7 +53,7 @@ export function getCLISyspromptPrefix(options?: {
  * Enabled by default, can be disabled via env var or GrowthBook killswitch.
  */
 function isAttributionHeaderEnabled(): boolean {
-  if (isEnvDefinedFalsy(process.env.CLAUDE_CODE_ATTRIBUTION_HEADER)) {
+  if (isEnvDefinedFalsy(process.env.QUANTUM_ATTRIBUTION_HEADER)) {
     return false
   }
   return getFeatureValue_CACHED_MAY_BE_STALE('tengu_attribution_header', true)
@@ -79,7 +79,7 @@ export function getAttributionHeader(fingerprint: string): string {
   }
 
   const version = `${MACRO.VERSION}.${fingerprint}`
-  const entrypoint = process.env.CLAUDE_CODE_ENTRYPOINT ?? 'unknown'
+  const entrypoint = process.env.QUANTUM_ENTRYPOINT ?? 'unknown'
 
   // cch=00000 placeholder is overwritten by Bun's HTTP stack with attestation token
   const cch = false ? ' cch=00000;' : ''

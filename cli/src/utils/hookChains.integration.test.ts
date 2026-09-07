@@ -19,7 +19,7 @@ type ImportHarnessOptions = {
 }
 
 const tempDirs: string[] = []
-const originalHookChainsEnabled = process.env.CLAUDE_CODE_ENABLE_HOOK_CHAINS
+const originalHookChainsEnabled = process.env.QUANTUM_ENABLE_HOOK_CHAINS
 
 async function createConfigFile(config: unknown): Promise<string> {
   const dir = await mkdtemp(join(tmpdir(), 'quantum-hook-chains-int-'))
@@ -101,16 +101,16 @@ async function importHookChainsHarness(
 }
 
 beforeEach(() => {
-  process.env.CLAUDE_CODE_ENABLE_HOOK_CHAINS = '1'
+  process.env.QUANTUM_ENABLE_HOOK_CHAINS = '1'
 })
 
 afterEach(async () => {
   mock.restore()
 
   if (originalHookChainsEnabled === undefined) {
-    delete process.env.CLAUDE_CODE_ENABLE_HOOK_CHAINS
+    delete process.env.QUANTUM_ENABLE_HOOK_CHAINS
   } else {
-    process.env.CLAUDE_CODE_ENABLE_HOOK_CHAINS = originalHookChainsEnabled
+    process.env.QUANTUM_ENABLE_HOOK_CHAINS = originalHookChainsEnabled
   }
 
   await Promise.all(

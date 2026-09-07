@@ -97,8 +97,8 @@ function getOpenAIMissingKeyMessage(): string {
   const profilePath = resolve(process.cwd(), PROFILE_FILE_NAME)
 
   return [
-    'OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
-    `To recover, run /provider and switch provider, or set CLAUDE_CODE_USE_OPENAI=0 in your shell environment.`,
+    'OPENAI_API_KEY is required when QUANTUM_USE_OPENAI=1 and OPENAI_BASE_URL is not local.',
+    `To recover, run /provider and switch provider, or set QUANTUM_USE_OPENAI=0 in your shell environment.`,
     `Saved startup settings can come from ${globalConfigPath} or ${profilePath}.`,
   ].join('\n')
 }
@@ -178,7 +178,7 @@ function getValidationTargetBaseUrl(
 function getRuntimeValidationTarget(
   env: NodeJS.ProcessEnv,
 ): ValidationTarget | undefined {
-  const useOpenAI = isEnvTruthy(env.CLAUDE_CODE_USE_OPENAI)
+  const useOpenAI = isEnvTruthy(env.QUANTUM_USE_OPENAI)
   const validationTargets = getValidationTargets()
 
   const enabledTarget = validationTargets.find(target => {
@@ -384,7 +384,7 @@ export async function getProviderValidationError(
     MISTRAL_API_KEY: env.MISTRAL_API_KEY,
     BNKR_API_KEY: env.BNKR_API_KEY,
   }
-  const useOpenAI = isEnvTruthy(env.CLAUDE_CODE_USE_OPENAI)
+  const useOpenAI = isEnvTruthy(env.QUANTUM_USE_OPENAI)
   const validationTarget = getRuntimeValidationTarget(env)
 
   if (!useOpenAI && !validationTarget) {

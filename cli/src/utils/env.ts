@@ -5,7 +5,7 @@ import { fileSuffixForOauthConfig } from '../constants/oauth.js'
 import { isRunningWithBun } from './bundledMode.js'
 import { createCombinedAbortSignal } from './combinedAbortSignal.js'
 import {
-  getClaudeConfigHomeDir,
+  getQuantumConfigHomeDir,
   isEnvTruthy,
   migrateLegacyClaudeConfigHome,
 } from './envUtils.js'
@@ -43,15 +43,15 @@ export const getGlobalClaudeFile = memoize((): string => {
   // Legacy fallback for backwards compatibility
   if (
     getFsImplementation().existsSync(
-      join(getClaudeConfigHomeDir(), '.config.json'),
+      join(getQuantumConfigHomeDir(), '.config.json'),
     )
   ) {
-    return join(getClaudeConfigHomeDir(), '.config.json')
+    return join(getQuantumConfigHomeDir(), '.config.json')
   }
 
   const oauthSuffix = fileSuffixForOauthConfig()
-  const configDir = process.env.CLAUDE_CONFIG_DIR || homedir()
-  const hasExplicitConfigDir = Boolean(process.env.CLAUDE_CONFIG_DIR)
+  const configDir = process.env.QUANTUM_CONFIG_DIR || homedir()
+  const hasExplicitConfigDir = Boolean(process.env.QUANTUM_CONFIG_DIR)
   let migrationSucceeded = true
 
   if (!hasExplicitConfigDir) {
@@ -59,10 +59,10 @@ export const getGlobalClaudeFile = memoize((): string => {
   }
 
   // Default installs hard-cut to .quantum.json after the migration above.
-  // Explicit CLAUDE_CONFIG_DIR users keep the legacy filename fallback because
+  // Explicit QUANTUM_CONFIG_DIR users keep the legacy filename fallback because
   // that env var is the opt-out for automatic migration.
   return resolveGlobalClaudeFile({
-    configDirEnv: process.env.CLAUDE_CONFIG_DIR,
+    configDirEnv: process.env.QUANTUM_CONFIG_DIR,
     homeDir: configDir,
     oauthSuffix,
     migrationSucceeded,
@@ -386,12 +386,12 @@ export const env = {
 
 /**
  * Returns the host platform for analytics reporting.
- * If CLAUDE_CODE_HOST_PLATFORM is set to a valid platform value, that overrides
+ * If QUANTUM_HOST_PLATFORM is set to a valid platform value, that overrides
  * the detected platform. This is useful for container/remote environments where
  * process.platform reports the container OS but the actual host platform differs.
  */
 export function getHostPlatformForAnalytics(): Platform {
-  const override = process.env.CLAUDE_CODE_HOST_PLATFORM
+  const override = process.env.QUANTUM_HOST_PLATFORM
   if (override === 'win32' || override === 'darwin' || override === 'linux') {
     return override
   }

@@ -332,7 +332,7 @@ export function addToTotalSessionCost(
   recordCacheRequest(cacheMetrics, model)
 
   // Opt-in structured per-request debug log on stderr. Power-user knob, not
-  // shown in the REPL — complements CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT
+  // shown in the REPL — complements QUANTUM_ENABLE_TOKEN_USAGE_ATTACHMENT
   // (which is model-facing). Any truthy value except "0"/"false" enables it.
   if (shouldLogTokenUsageVerbose()) {
     process.stderr.write(

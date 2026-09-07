@@ -9,28 +9,28 @@ import {
 import { loadMarkdownFilesForSubdir } from '../../utils/markdownConfigLoader.js'
 
 const originalEnv = {
-  CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR,
-  CLAUDE_CODE_SIMPLE: process.env.CLAUDE_CODE_SIMPLE,
-  CLAUDE_CODE_USE_NATIVE_FILE_SEARCH:
-    process.env.CLAUDE_CODE_USE_NATIVE_FILE_SEARCH,
+  QUANTUM_CONFIG_DIR: process.env.QUANTUM_CONFIG_DIR,
+  QUANTUM_SIMPLE: process.env.QUANTUM_SIMPLE,
+  QUANTUM_USE_NATIVE_FILE_SEARCH:
+    process.env.QUANTUM_USE_NATIVE_FILE_SEARCH,
 }
 
 let tempDir: string
 
 beforeEach(async () => {
   tempDir = await mkdtemp(join(tmpdir(), 'quantum-agents-test-'))
-  process.env.CLAUDE_CONFIG_DIR = join(tempDir, '.quantum')
-  process.env.CLAUDE_CODE_USE_NATIVE_FILE_SEARCH = '1'
-  delete process.env.CLAUDE_CODE_SIMPLE
+  process.env.QUANTUM_CONFIG_DIR = join(tempDir, '.quantum')
+  process.env.QUANTUM_USE_NATIVE_FILE_SEARCH = '1'
+  delete process.env.QUANTUM_SIMPLE
   clearAgentDefinitionsCache()
   loadMarkdownFilesForSubdir.cache.clear?.()
 })
 
 afterEach(async () => {
   await rm(tempDir, { recursive: true, force: true })
-  restoreEnv('CLAUDE_CONFIG_DIR')
-  restoreEnv('CLAUDE_CODE_SIMPLE')
-  restoreEnv('CLAUDE_CODE_USE_NATIVE_FILE_SEARCH')
+  restoreEnv('QUANTUM_CONFIG_DIR')
+  restoreEnv('QUANTUM_SIMPLE')
+  restoreEnv('QUANTUM_USE_NATIVE_FILE_SEARCH')
   clearAgentDefinitionsCache()
   loadMarkdownFilesForSubdir.cache.clear?.()
 })
@@ -65,11 +65,11 @@ ${prompt}
 describe('agent definition loading', () => {
   test('loads user agents from the Quantum config dir in simple mode', async () => {
     await writeAgent(
-      join(process.env.CLAUDE_CONFIG_DIR!, 'agents', 'user-agent.md'),
+      join(process.env.QUANTUM_CONFIG_DIR!, 'agents', 'user-agent.md'),
       'user-agent',
     )
 
-    process.env.CLAUDE_CODE_SIMPLE = '1'
+    process.env.QUANTUM_SIMPLE = '1'
     clearAgentDefinitionsCache()
     loadMarkdownFilesForSubdir.cache.clear?.()
 

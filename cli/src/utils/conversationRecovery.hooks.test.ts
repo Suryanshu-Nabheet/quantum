@@ -54,7 +54,7 @@ afterEach(async () => {
 })
 
 test('loadConversationForResume rejects oversized transcripts before resume hooks run', async () => {
-  delete process.env.CLAUDE_CODE_SIMPLE
+  delete process.env.QUANTUM_SIMPLE
   const hugeContent = 'x'.repeat(8 * 1024 * 1024 + 32 * 1024)
   const path = await writeJsonl(user(id(3), hugeContent))
   const hookSpy = mock(() => Promise.resolve([{ type: 'hook' }]))

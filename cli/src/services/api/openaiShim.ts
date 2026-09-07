@@ -1,5 +1,5 @@
 /**
- * OpenAI-compatible API shim for Claude Code.
+ * OpenAI-compatible API shim for Quantum CLI.
  *
  * Translates Anthropic SDK calls (anthropic.beta.messages.create) into
  * OpenAI-compatible chat completion requests and streams back events
@@ -9,7 +9,7 @@
  * Together, Groq, Fireworks, DeepSeek, Mistral, and any OpenAI-compatible API.
  *
  * Environment variables:
- *   CLAUDE_CODE_USE_OPENAI=1          — enable this provider
+ *   QUANTUM_USE_OPENAI=1          — enable this provider
  *   OPENAI_API_KEY=sk-...             — API key (optional for local models)
  *   OPENAI_AUTH_HEADER=api-key        — optional custom auth header name
  *   OPENAI_AUTH_HEADER_VALUE=...      — optional custom auth header value
@@ -20,7 +20,7 @@
  *   CODEX_API_KEY / ~/.codex/auth.json — Codex auth for codexplan/codexspark
  *
  * GitHub Copilot API (api.githubcopilot.com), OpenAI-compatible:
- *   CLAUDE_CODE_USE_GITHUB=1         — enable GitHub inference (no need for USE_OPENAI)
+ *   QUANTUM_USE_GITHUB=1         — enable GitHub inference (no need for USE_OPENAI)
  *   GITHUB_TOKEN or GH_TOKEN         — Copilot API token (mapped to Bearer auth)
  *   OPENAI_MODEL                     — optional; use github:copilot or openai/gpt-4.1 style IDs
  */
@@ -107,7 +107,7 @@ const COPILOT_HEADERS: Record<string, string> = {
 }
 
 function isGithubModelsMode(): boolean {
-  return isEnvTruthy(process.env.CLAUDE_CODE_USE_GITHUB)
+  return isEnvTruthy(process.env.QUANTUM_USE_GITHUB)
 }
 
 function filterAnthropicHeaders(
@@ -386,7 +386,7 @@ function convertContentBlocks(
 
 function isGeminiMode(): boolean {
   return (
-    isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI) ||
+    isEnvTruthy(process.env.QUANTUM_USE_GEMINI) ||
     hasGeminiApiHost(process.env.OPENAI_BASE_URL)
   )
 }
@@ -397,7 +397,7 @@ function hydrateOpenAIShimCompatibilityEnv(
   // Provider selection, base URL defaults, and model defaults now flow
   // through resolveProviderRequest(). The shim still needs a few legacy
   // credential aliases because downstream auth/header paths read OPENAI_*.
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GEMINI)) {
     const geminiApiKey =
       processEnv.GEMINI_API_KEY ?? processEnv.GOOGLE_API_KEY
     if (geminiApiKey && !processEnv.OPENAI_API_KEY) {
@@ -406,14 +406,14 @@ function hydrateOpenAIShimCompatibilityEnv(
     return
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_MISTRAL)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_MISTRAL)) {
     if (processEnv.MISTRAL_API_KEY && !processEnv.OPENAI_API_KEY) {
       processEnv.OPENAI_API_KEY = processEnv.MISTRAL_API_KEY
     }
     return
   }
 
-  if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GITHUB)) {
+  if (isEnvTruthy(processEnv.QUANTUM_USE_GITHUB)) {
     processEnv.OPENAI_API_KEY ??=
       processEnv.GITHUB_TOKEN ?? processEnv.GH_TOKEN ?? ''
     return
@@ -479,7 +479,7 @@ function convertMessages(
     const msg = messages[i]
     const isLastInHistory = i === messages.length - 1
 
-    // Claude Code wraps messages in { role, message: { role, content } }
+    // Quantum CLI wraps messages in { role, message: { role, content } }
     const inner = msg.message ?? msg
     const role = (inner as { role?: string }).role ?? msg.role
     const content = (inner as { content?: unknown }).content

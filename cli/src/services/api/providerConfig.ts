@@ -592,9 +592,9 @@ export function resolveProviderRequest(options?: {
   reasoningEffortOverride?: ReasoningEffort
   apiFormat?: OpenAICompatibleApiFormat | string
 }): ResolvedProviderRequest {
-  const isGithubMode = isEnvTruthy(process.env.CLAUDE_CODE_USE_GITHUB)
-  const isMistralMode = isEnvTruthy(process.env.CLAUDE_CODE_USE_MISTRAL)
-  const isGeminiMode = isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI)
+  const isGithubMode = isEnvTruthy(process.env.QUANTUM_USE_GITHUB)
+  const isMistralMode = isEnvTruthy(process.env.QUANTUM_USE_MISTRAL)
+  const isGeminiMode = isEnvTruthy(process.env.QUANTUM_USE_GEMINI)
   const requestedModel =
     options?.model?.trim() ||
     (isMistralMode
@@ -741,13 +741,13 @@ export function resolveProviderRequest(options?: {
 }
 
 export function getAdditionalModelOptionsCacheScope(): string | null {
-  if (!isEnvTruthy(process.env.CLAUDE_CODE_USE_OPENAI)) {
-    if (!isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI) &&
-        !isEnvTruthy(process.env.CLAUDE_CODE_USE_MISTRAL) &&
-        !isEnvTruthy(process.env.CLAUDE_CODE_USE_GITHUB) &&
-        !isEnvTruthy(process.env.CLAUDE_CODE_USE_BEDROCK) &&
-        !isEnvTruthy(process.env.CLAUDE_CODE_USE_VERTEX) &&
-        !isEnvTruthy(process.env.CLAUDE_CODE_USE_FOUNDRY)) {
+  if (!isEnvTruthy(process.env.QUANTUM_USE_OPENAI)) {
+    if (!isEnvTruthy(process.env.QUANTUM_USE_GEMINI) &&
+        !isEnvTruthy(process.env.QUANTUM_USE_MISTRAL) &&
+        !isEnvTruthy(process.env.QUANTUM_USE_GITHUB) &&
+        !isEnvTruthy(process.env.QUANTUM_USE_BEDROCK) &&
+        !isEnvTruthy(process.env.QUANTUM_USE_VERTEX) &&
+        !isEnvTruthy(process.env.QUANTUM_USE_FOUNDRY)) {
       return 'firstParty'
     }
     return null

@@ -4,22 +4,22 @@ import { type OptionWithDescription, Select } from '../../components/CustomSelec
 import { Dialog } from '../../components/design-system/Dialog.js';
 import { Box, Text } from '../../ink.js';
 import { useAppState } from '../../state/AppState.js';
-import { isClaudeAISubscriber } from '../../utils/auth.js';
+import { isQuantumSubscriber } from '../../utils/auth.js';
 import { openBrowser } from '../../utils/browser.js';
 import { CLAUDE_IN_CHROME_MCP_SERVER_NAME, openInChrome } from '../../utils/browserExtension/common.js';
 import { isChromeExtensionInstalled } from '../../utils/browserExtension/setup.js';
 import { getGlobalConfig, saveGlobalConfig } from '../../utils/config.js';
 import { env } from '../../utils/env.js';
 import { isRunningOnHomespace } from '../../utils/envUtils.js';
-const CHROME_EXTENSION_URL = 'https://claude.ai/chrome';
-const CHROME_PERMISSIONS_URL = 'https://clau.de/chrome/permissions';
-const CHROME_RECONNECT_URL = 'https://clau.de/chrome/reconnect';
+const CHROME_EXTENSION_URL = 'https://github.com/Suryanshu-Nabheet/Quantum';
+const CHROME_PERMISSIONS_URL = 'https://github.com/Suryanshu-Nabheet/Quantum';
+const CHROME_RECONNECT_URL = 'https://github.com/Suryanshu-Nabheet/Quantum';
 type MenuAction = 'install-extension' | 'reconnect' | 'manage-permissions' | 'toggle-default';
 type Props = {
   onDone: (result?: string) => void;
   isExtensionInstalled: boolean;
   configEnabled: boolean | undefined;
-  isClaudeAISubscriber: boolean;
+  isQuantumSubscriber: boolean;
   isWSL: boolean;
 };
 function BrowserExtensionMenu(t0) {
@@ -28,7 +28,7 @@ function BrowserExtensionMenu(t0) {
     onDone,
     isExtensionInstalled: installed,
     configEnabled,
-    isClaudeAISubscriber,
+    isQuantumSubscriber,
     isWSL
   } = t0;
   const mcpClients = useAppState(_temp);
@@ -186,7 +186,7 @@ function BrowserExtensionMenu(t0) {
   } else {
     options = $[8];
   }
-  const isDisabled = isWSL || true && !isClaudeAISubscriber;
+  const isDisabled = isWSL || true && !isQuantumSubscriber;
   let t5;
   if ($[18] !== onDone) {
     t5 = () => onDone();
@@ -211,9 +211,9 @@ function BrowserExtensionMenu(t0) {
     t7 = $[22];
   }
   let t8;
-  if ($[23] !== isClaudeAISubscriber) {
-    t8 = true && !isClaudeAISubscriber && <Text color="error">The browser extension requires a claude.ai subscription.</Text>;
-    $[23] = isClaudeAISubscriber;
+  if ($[23] !== isQuantumSubscriber) {
+    t8 = true && !isQuantumSubscriber && <Text color="error">The browser extension requires a provider authentication.</Text>;
+    $[23] = isQuantumSubscriber;
     $[24] = t8;
   } else {
     t8 = $[24];
@@ -278,7 +278,7 @@ function _temp(s) {
 export const call = async function (onDone: (result?: string) => void): Promise<React.ReactNode> {
   const isExtensionInstalled = await isChromeExtensionInstalled();
   const config = getGlobalConfig();
-  const isSubscriber = isClaudeAISubscriber();
+  const isSubscriber = isQuantumSubscriber();
   const isWSL = env.isWslEnvironment();
-  return <BrowserExtensionMenu onDone={onDone} isExtensionInstalled={isExtensionInstalled} configEnabled={config.browserExtensionDefaultEnabled ?? config.claudeInChromeDefaultEnabled} isClaudeAISubscriber={isSubscriber} isWSL={isWSL} />;
+  return <BrowserExtensionMenu onDone={onDone} isExtensionInstalled={isExtensionInstalled} configEnabled={config.browserExtensionDefaultEnabled ?? config.claudeInChromeDefaultEnabled} isQuantumSubscriber={isSubscriber} isWSL={isWSL} />;
 };

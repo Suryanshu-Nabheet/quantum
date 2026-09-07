@@ -466,4 +466,3 @@ export function tokenCountWithEstimation(messages: readonly Message[]): number {
   return getIncrementalTokenCounter().getCount(messages)
 }
 
-

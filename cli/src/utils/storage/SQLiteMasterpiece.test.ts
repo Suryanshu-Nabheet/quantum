@@ -16,9 +16,9 @@ import { sanitizePath } from '../sessionStoragePortable.js'
 import { getFsImplementation } from '../fsOperations.js'
 
 describe('SQLite Masterpiece: Edge Cases & Multi-Project Isolation', () => {
-  const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
+  const originalConfigDir = process.env.QUANTUM_CONFIG_DIR
   const rootTestDir = mkdtempSync(join(tmpdir(), 'quantum-masterpiece-'))
-  process.env.CLAUDE_CONFIG_DIR = rootTestDir
+  process.env.QUANTUM_CONFIG_DIR = rootTestDir
   
   const project1Dir = join(rootTestDir, 'proj1')
   const project2Dir = join(rootTestDir, 'proj2')
@@ -32,9 +32,9 @@ describe('SQLite Masterpiece: Edge Cases & Multi-Project Isolation', () => {
   afterAll(() => {
     resetGlobalGraph()
     if (originalConfigDir === undefined) {
-      delete process.env.CLAUDE_CONFIG_DIR
+      delete process.env.QUANTUM_CONFIG_DIR
     } else {
-      process.env.CLAUDE_CONFIG_DIR = originalConfigDir
+      process.env.QUANTUM_CONFIG_DIR = originalConfigDir
     }
     rmSync(rootTestDir, { recursive: true, force: true })
   })

@@ -12,11 +12,11 @@ const originalEnv = {
   OPENAI_AUTH_HEADER: process.env.OPENAI_AUTH_HEADER,
   OPENAI_AUTH_SCHEME: process.env.OPENAI_AUTH_SCHEME,
   OPENAI_AUTH_HEADER_VALUE: process.env.OPENAI_AUTH_HEADER_VALUE,
-  CLAUDE_CODE_USE_GITHUB: process.env.CLAUDE_CODE_USE_GITHUB,
+  QUANTUM_USE_GITHUB: process.env.QUANTUM_USE_GITHUB,
   GITHUB_TOKEN: process.env.GITHUB_TOKEN,
   GH_TOKEN: process.env.GH_TOKEN,
-  CLAUDE_CODE_USE_OPENAI: process.env.CLAUDE_CODE_USE_OPENAI,
-  CLAUDE_CODE_USE_GEMINI: process.env.CLAUDE_CODE_USE_GEMINI,
+  QUANTUM_USE_OPENAI: process.env.QUANTUM_USE_OPENAI,
+  QUANTUM_USE_GEMINI: process.env.QUANTUM_USE_GEMINI,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   GEMINI_ACCESS_TOKEN: process.env.GEMINI_ACCESS_TOKEN,
@@ -93,11 +93,11 @@ beforeEach(() => {
   delete process.env.OPENAI_AUTH_HEADER
   delete process.env.OPENAI_AUTH_SCHEME
   delete process.env.OPENAI_AUTH_HEADER_VALUE
-  delete process.env.CLAUDE_CODE_USE_GITHUB
+  delete process.env.QUANTUM_USE_GITHUB
   delete process.env.GITHUB_TOKEN
   delete process.env.GH_TOKEN
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_USE_GEMINI
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_USE_GEMINI
   delete process.env.GEMINI_API_KEY
   delete process.env.GOOGLE_API_KEY
   delete process.env.GEMINI_ACCESS_TOKEN
@@ -125,11 +125,11 @@ afterEach(() => {
   restoreEnv('OPENAI_AUTH_HEADER', originalEnv.OPENAI_AUTH_HEADER)
   restoreEnv('OPENAI_AUTH_SCHEME', originalEnv.OPENAI_AUTH_SCHEME)
   restoreEnv('OPENAI_AUTH_HEADER_VALUE', originalEnv.OPENAI_AUTH_HEADER_VALUE)
-  restoreEnv('CLAUDE_CODE_USE_GITHUB', originalEnv.CLAUDE_CODE_USE_GITHUB)
+  restoreEnv('QUANTUM_USE_GITHUB', originalEnv.QUANTUM_USE_GITHUB)
   restoreEnv('GITHUB_TOKEN', originalEnv.GITHUB_TOKEN)
   restoreEnv('GH_TOKEN', originalEnv.GH_TOKEN)
-  restoreEnv('CLAUDE_CODE_USE_OPENAI', originalEnv.CLAUDE_CODE_USE_OPENAI)
-  restoreEnv('CLAUDE_CODE_USE_GEMINI', originalEnv.CLAUDE_CODE_USE_GEMINI)
+  restoreEnv('QUANTUM_USE_OPENAI', originalEnv.QUANTUM_USE_OPENAI)
+  restoreEnv('QUANTUM_USE_GEMINI', originalEnv.QUANTUM_USE_GEMINI)
   restoreEnv('GEMINI_API_KEY', originalEnv.GEMINI_API_KEY)
   restoreEnv('GOOGLE_API_KEY', originalEnv.GOOGLE_API_KEY)
   restoreEnv('GEMINI_ACCESS_TOKEN', originalEnv.GEMINI_ACCESS_TOKEN)
@@ -638,7 +638,7 @@ test('applies descriptor static headers before client and request headers', asyn
     },
   })
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://shim-header-test.example/v1'
   process.env.OPENAI_MODEL = 'shim-test-model'
 
@@ -700,7 +700,7 @@ test('applies descriptor static headers before client and request headers', asyn
 test('strips Anthropic-specific headers on GitHub Codex transport requests', async () => {
   let capturedHeaders: Headers | undefined
 
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   process.env.OPENAI_API_KEY = 'github-test-key'
   delete process.env.OPENAI_BASE_URL
   delete process.env.OPENAI_MODEL
@@ -747,7 +747,7 @@ test('strips Anthropic-specific headers on GitHub Codex transport requests', asy
 test('strips Anthropic-specific headers on GitHub Codex transport with providerOverride API key', async () => {
   let capturedHeaders: Headers | undefined
 
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   process.env.OPENAI_API_KEY = 'env-should-not-win'
   delete process.env.OPENAI_BASE_URL
   delete process.env.OPENAI_MODEL
@@ -965,7 +965,7 @@ test('keeps max_completion_tokens for non-local non-github providers', async () 
 test('uses route-specific credential env vars for descriptor-backed openai-compatible routes', async () => {
   let capturedHeaders: Headers | undefined
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENROUTER_API_KEY = 'or-route-key'
   delete process.env.OPENAI_API_KEY
@@ -1416,7 +1416,7 @@ test('uses GEMINI_ACCESS_TOKEN for Gemini OpenAI-compatible requests', async () 
   let capturedProject: string | null = null
   let requestUrl: string | undefined
 
-  process.env.CLAUDE_CODE_USE_GEMINI = '1'
+  process.env.QUANTUM_USE_GEMINI = '1'
   process.env.GEMINI_AUTH_MODE = 'access-token'
   process.env.GEMINI_ACCESS_TOKEN = 'gemini-access-token'
   process.env.GOOGLE_CLOUD_PROJECT = 'gemini-project'
@@ -1484,7 +1484,7 @@ test('uses GEMINI_ACCESS_TOKEN for Gemini OpenAI-compatible requests', async () 
 test('uses NVIDIA_API_KEY for NVIDIA NIM requests without OPENAI_API_KEY', async () => {
   let capturedAuthorization: string | null = null
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.NVIDIA_NIM = '1'
   process.env.OPENAI_BASE_URL = 'https://integrate.api.nvidia.com/v1'
   process.env.OPENAI_MODEL = 'nvidia/llama-3.1-nemotron-70b-instruct'
@@ -1538,7 +1538,7 @@ test('uses NVIDIA_API_KEY for NVIDIA NIM requests without OPENAI_API_KEY', async
 test('does not use stale NVIDIA_API_KEY for non-NVIDIA OpenAI-compatible routes', async () => {
   let capturedAuthorization: string | null = null
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.NVIDIA_NIM = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENAI_MODEL = 'openai/gpt-5-mini'
@@ -1588,7 +1588,7 @@ test('does not use stale NVIDIA_API_KEY for non-NVIDIA OpenAI-compatible routes'
 test('does not use MINIMAX_API_KEY for non-MiniMax OpenAI-compatible routes', async () => {
   let capturedAuthorization: string | null = null
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENAI_MODEL = 'openai/gpt-5-mini'
   process.env.MINIMAX_API_KEY = 'minimax-live-key'
@@ -1638,7 +1638,7 @@ test('xiaomi mimo route uses api-key auth header and max_completion_tokens', asy
   let capturedHeaders: Record<string, string> | undefined
   let capturedBody: Record<string, unknown> | undefined
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://api.xiaomimimo.com/v1'
   process.env.OPENAI_MODEL = 'mimo-v2.5-pro'
   process.env.MIMO_API_KEY = 'mimo-live-key'
@@ -1688,7 +1688,7 @@ test('xiaomi mimo route uses api-key auth header and max_completion_tokens', asy
 test('does not use BNKR_API_KEY for non-Bankr OpenAI-compatible routes', async () => {
   let capturedAuthorization: string | null = null
 
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENAI_MODEL = 'openai/gpt-5-mini'
   process.env.BNKR_API_KEY = 'bankr-live-key'
@@ -4472,7 +4472,7 @@ test('generic OpenAI-compatible providers do not echo reasoning_content on assis
 })
 
 test('gateway-routed DeepSeek models inherit descriptor-backed reasoning and token shaping', async () => {
-  process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  process.env.QUANTUM_USE_OPENAI = '1'
   process.env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
   process.env.OPENAI_API_KEY = 'sk-openrouter-test'
 
@@ -5108,7 +5108,7 @@ test('strips Anthropic attribution header block from chat-completions system pro
           'x-anthropic-billing-header: cc_version=0.8.0.abc123; ' +
           'cc_entrypoint=cli;',
       },
-      { type: 'text', text: 'You are Claude Code, helpful assistant.' },
+      { type: 'text', text: 'You are Quantum CLI, helpful assistant.' },
       { type: 'text', text: 'Project context: bun + react.' },
     ],
     messages: [{ role: 'user', content: 'hello' }],
@@ -5121,7 +5121,7 @@ test('strips Anthropic attribution header block from chat-completions system pro
   expect(sysMsg).toBeDefined()
   expect(sysMsg?.content).not.toContain('x-anthropic-billing-header')
   expect(sysMsg?.content).not.toContain('cc_version=')
-  expect(sysMsg?.content).toContain('You are Claude Code, helpful assistant.')
+  expect(sysMsg?.content).toContain('You are Quantum CLI, helpful assistant.')
   expect(sysMsg?.content).toContain('Project context: bun + react.')
 })
 
@@ -5158,7 +5158,7 @@ test('strips Anthropic attribution header block from responses-API instructions 
         type: 'text',
         text: 'x-anthropic-billing-header: cc_version=0.8.0.abc123; cc_entrypoint=cli;',
       },
-      { type: 'text', text: 'You are Claude Code.' },
+      { type: 'text', text: 'You are Quantum CLI.' },
     ],
     messages: [{ role: 'user', content: 'hello' }],
     max_tokens: 64,
@@ -5168,7 +5168,7 @@ test('strips Anthropic attribution header block from responses-API instructions 
   const instructions = capturedBody?.instructions as string
   expect(instructions).not.toContain('x-anthropic-billing-header')
   expect(instructions).not.toContain('cc_version=')
-  expect(instructions).toContain('You are Claude Code.')
+  expect(instructions).toContain('You are Quantum CLI.')
 })
 
 test('emits reasoning_effort on chat_completions when reasoningEffort is passed', async () => {

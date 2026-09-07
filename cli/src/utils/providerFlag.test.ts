@@ -9,12 +9,12 @@ import {
 } from './providerFlag.js'
 
 const ENV_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_MISTRAL',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
+  'QUANTUM_USE_OPENAI',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_MISTRAL',
+  'QUANTUM_USE_BEDROCK',
+  'QUANTUM_USE_VERTEX',
   'OPENAI_BASE_URL',
   'OPENAI_API_KEY',
   'OPENAI_MODEL',
@@ -40,12 +40,12 @@ beforeEach(() => {
 })
 
 const RESET_KEYS = [
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_MISTRAL',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
+  'QUANTUM_USE_OPENAI',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_MISTRAL',
+  'QUANTUM_USE_BEDROCK',
+  'QUANTUM_USE_VERTEX',
   'OPENAI_BASE_URL',
   'OPENAI_API_KEY',
   'OPENAI_MODEL',
@@ -111,8 +111,8 @@ describe('applyProviderFlag - anthropic', () => {
   test('sets no env vars for anthropic (default)', () => {
     const result = applyProviderFlag('anthropic', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_GEMINI).toBeUndefined()
+    expect(process.env.QUANTUM_USE_OPENAI).toBeUndefined()
+    expect(process.env.QUANTUM_USE_GEMINI).toBeUndefined()
   })
 })
 
@@ -129,10 +129,10 @@ describe('VALID_PROVIDERS', () => {
 })
 
 describe('applyProviderFlag - openai', () => {
-  test('sets CLAUDE_CODE_USE_OPENAI=1', () => {
+  test('sets QUANTUM_USE_OPENAI=1', () => {
     const result = applyProviderFlag('openai', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
   })
 
   test('sets OPENAI_MODEL when --model is provided', () => {
@@ -142,10 +142,10 @@ describe('applyProviderFlag - openai', () => {
 })
 
 describe('applyProviderFlag - gemini', () => {
-  test('sets CLAUDE_CODE_USE_GEMINI=1', () => {
+  test('sets QUANTUM_USE_GEMINI=1', () => {
     const result = applyProviderFlag('gemini', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_GEMINI).toBe('1')
+    expect(process.env.QUANTUM_USE_GEMINI).toBe('1')
   })
 
   test('sets GEMINI_MODEL when --model is provided', () => {
@@ -155,37 +155,37 @@ describe('applyProviderFlag - gemini', () => {
 })
 
 describe('applyProviderFlag - github', () => {
-  test('sets CLAUDE_CODE_USE_GITHUB=1', () => {
+  test('sets QUANTUM_USE_GITHUB=1', () => {
     const result = applyProviderFlag('github', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_GITHUB).toBe('1')
+    expect(process.env.QUANTUM_USE_GITHUB).toBe('1')
   })
 })
 
 describe('applyProviderFlag - bedrock', () => {
-  test('sets CLAUDE_CODE_USE_BEDROCK=1', () => {
+  test('sets QUANTUM_USE_BEDROCK=1', () => {
     const result = applyProviderFlag('bedrock', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_BEDROCK).toBe('1')
+    expect(process.env.QUANTUM_USE_BEDROCK).toBe('1')
   })
 })
 
 describe('applyProviderFlag - vertex', () => {
-  test('sets CLAUDE_CODE_USE_VERTEX=1', () => {
+  test('sets QUANTUM_USE_VERTEX=1', () => {
     const result = applyProviderFlag('vertex', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_VERTEX).toBe('1')
+    expect(process.env.QUANTUM_USE_VERTEX).toBe('1')
   })
 })
 
 describe('applyProviderFlag - ollama', () => {
-  test('sets CLAUDE_CODE_USE_OPENAI=1 with Ollama defaults when unset', () => {
+  test('sets QUANTUM_USE_OPENAI=1 with Ollama defaults when unset', () => {
     delete process.env.OPENAI_BASE_URL
     delete process.env.OPENAI_API_KEY
 
     const result = applyProviderFlag('ollama', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL!).toBe('http://localhost:11434/v1')
     expect(process.env.OPENAI_API_KEY!).toBe('ollama')
   })
@@ -217,7 +217,7 @@ describe('applyProviderFlag - descriptor-backed openai-compatible routes', () =>
     const result = applyProviderFlag('deepseek', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://api.deepseek.com/v1')
     expect(process.env.OPENAI_MODEL).toBe('deepseek-v4-pro')
   })
@@ -226,7 +226,7 @@ describe('applyProviderFlag - descriptor-backed openai-compatible routes', () =>
     const result = applyProviderFlag('openrouter', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://openrouter.ai/api/v1')
   })
 
@@ -236,7 +236,7 @@ describe('applyProviderFlag - descriptor-backed openai-compatible routes', () =>
     const result = applyProviderFlag('openrouter', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.NVIDIA_NIM).toBeUndefined()
     expect(process.env.OPENAI_BASE_URL).toBe('https://openrouter.ai/api/v1')
   })
@@ -320,7 +320,7 @@ describe('applyProviderFlag - minimax', () => {
     const result = applyProviderFlag('minimax', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://api.minimax.io/v1')
     expect(process.env.OPENAI_MODEL).toBe('MiniMax-M2.7')
   })
@@ -333,7 +333,7 @@ describe('applyProviderFlag - nvidia-nim', () => {
     const result = applyProviderFlag('nvidia-nim', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.NVIDIA_NIM).toBe('1')
     expect(process.env.OPENAI_API_KEY).toBe('nvidia-live-key')
     expect(process.env.OPENAI_BASE_URL).toBe('https://integrate.api.nvidia.com/v1')
@@ -345,7 +345,7 @@ describe('applyProviderFlag - zai', () => {
     const result = applyProviderFlag('zai', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://api.z.ai/api/coding/paas/v4')
     expect(process.env.OPENAI_MODEL).toBe('GLM-5.1')
   })
@@ -358,7 +358,7 @@ describe('applyProviderFlag - xiaomi-mimo', () => {
     const result = applyProviderFlag('xiaomi-mimo', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://api.xiaomimimo.com/v1')
     expect(process.env.OPENAI_MODEL).toBe('mimo-v2.5-pro')
     expect(process.env.OPENAI_API_KEY).toBe('mimo-secret-key')
@@ -378,7 +378,7 @@ describe('applyProviderFlag - venice', () => {
     const result = applyProviderFlag('venice', [])
 
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL).toBe('https://api.venice.ai/api/v1')
     expect(process.env.OPENAI_MODEL).toBe('venice-uncensored')
     expect(process.env.OPENAI_API_KEY).toBe('venice-secret-key')
@@ -386,13 +386,13 @@ describe('applyProviderFlag - venice', () => {
 })
 
 describe('applyProviderFlag - xai', () => {
-  test('sets CLAUDE_CODE_USE_OPENAI=1 with xAI defaults when unset', () => {
+  test('sets QUANTUM_USE_OPENAI=1 with xAI defaults when unset', () => {
     delete process.env.OPENAI_BASE_URL
     delete process.env.OPENAI_API_KEY
 
     const result = applyProviderFlag('xai', [])
     expect(result.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL as string | undefined).toBe('https://api.x.ai/v1')
     expect(process.env.OPENAI_MODEL).toBe('grok-4.3')
   })
@@ -442,7 +442,7 @@ describe('applyProviderFlagFromArgs', () => {
     ])
 
     expect(result?.error).toBeUndefined()
-    expect(process.env.CLAUDE_CODE_USE_OPENAI).toBe('1')
+    expect(process.env.QUANTUM_USE_OPENAI).toBe('1')
     expect(process.env.OPENAI_BASE_URL!).toBe('http://localhost:11434/v1')
     expect(process.env.OPENAI_API_KEY!).toBe('ollama')
     expect(process.env.OPENAI_MODEL).toBe('qwen2.5:3b')
@@ -484,31 +484,31 @@ describe('applyModelFlagFromArgs', () => {
   })
 
   test('is a no-op when --provider is also present (handled by applyProviderFlagFromArgs)', () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     applyModelFlagFromArgs(['--provider', 'openai', '--model', 'gpt-4o'])
     expect(process.env.OPENAI_MODEL).toBeUndefined()
   })
 
-  test('sets OPENAI_MODEL when CLAUDE_CODE_USE_OPENAI is active', () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+  test('sets OPENAI_MODEL when QUANTUM_USE_OPENAI is active', () => {
+    process.env.QUANTUM_USE_OPENAI = '1'
     applyModelFlagFromArgs(['--model', 'gpt-4o-mini'])
     expect(process.env.OPENAI_MODEL).toBe('gpt-4o-mini')
   })
 
-  test('sets GEMINI_MODEL when CLAUDE_CODE_USE_GEMINI is active', () => {
-    process.env.CLAUDE_CODE_USE_GEMINI = '1'
+  test('sets GEMINI_MODEL when QUANTUM_USE_GEMINI is active', () => {
+    process.env.QUANTUM_USE_GEMINI = '1'
     applyModelFlagFromArgs(['--model', 'gemini-2.0-flash'])
     expect(process.env.GEMINI_MODEL).toBe('gemini-2.0-flash')
   })
 
-  test('sets MISTRAL_MODEL when CLAUDE_CODE_USE_MISTRAL is active', () => {
-    process.env.CLAUDE_CODE_USE_MISTRAL = '1'
+  test('sets MISTRAL_MODEL when QUANTUM_USE_MISTRAL is active', () => {
+    process.env.QUANTUM_USE_MISTRAL = '1'
     applyModelFlagFromArgs(['--model', 'devstral-latest'])
     expect(process.env.MISTRAL_MODEL).toBe('devstral-latest')
   })
 
-  test('sets OPENAI_MODEL when CLAUDE_CODE_USE_GITHUB is active', () => {
-    process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  test('sets OPENAI_MODEL when QUANTUM_USE_GITHUB is active', () => {
+    process.env.QUANTUM_USE_GITHUB = '1'
     applyModelFlagFromArgs(['--model', 'gpt-4.1'])
     expect(process.env.OPENAI_MODEL).toBe('gpt-4.1')
   })
@@ -519,14 +519,14 @@ describe('applyModelFlagFromArgs', () => {
   })
 
   test('overrides an existing *_MODEL value (saved profile override)', () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     process.env.OPENAI_MODEL = 'gpt-4o'
     applyModelFlagFromArgs(['--model', 'gpt-4o-mini'])
     expect(process.env.OPENAI_MODEL).toBe('gpt-4o-mini')
   })
 
   test('accepts --model value containing colons (ollama tag syntax)', () => {
-    process.env.CLAUDE_CODE_USE_OPENAI = '1'
+    process.env.QUANTUM_USE_OPENAI = '1'
     applyModelFlagFromArgs(['--model', 'qwen2.5-coder:14b'])
     expect(process.env.OPENAI_MODEL).toBe('qwen2.5-coder:14b')
   })

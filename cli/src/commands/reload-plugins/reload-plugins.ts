@@ -22,7 +22,7 @@ export const call: LocalCommandCall = async (_args, context) => {
   // can re-run /reload-plugins to retry. Startup path keeps its retries.
   if (
     false &&
-    (isEnvTruthy(process.env.CLAUDE_CODE_REMOTE) || getIsRemoteMode())
+    (isEnvTruthy(process.env.QUANTUM_REMOTE) || getIsRemoteMode())
   ) {
     const applied = await redownloadUserSettings()
     // applyRemoteEntriesToLocal uses markInternalWrite to suppress the

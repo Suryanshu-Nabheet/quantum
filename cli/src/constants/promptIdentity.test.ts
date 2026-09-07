@@ -20,37 +20,37 @@ import { EXPLORE_AGENT } from '../tools/AgentTool/built-in/exploreAgent.js'
 import { PLAN_AGENT } from '../tools/AgentTool/built-in/planAgent.js'
 import { STATUSLINE_SETUP_AGENT } from '../tools/AgentTool/built-in/statuslineSetup.js'
 
-const originalSimpleEnv = process.env.CLAUDE_CODE_SIMPLE
+const originalSimpleEnv = process.env.QUANTUM_SIMPLE
 
 afterEach(() => {
-  process.env.CLAUDE_CODE_SIMPLE = originalSimpleEnv
+  process.env.QUANTUM_SIMPLE = originalSimpleEnv
   clearSystemPromptSections()
 })
 
-test('CLI identity prefixes describe Quantum instead of Claude Code', () => {
-  expect(getCLISyspromptPrefix()).toContain('Quantum')
-  expect(getCLISyspromptPrefix()).not.toContain('Claude Code')
-  expect(getCLISyspromptPrefix()).not.toContain("Anthropic's official CLI for Claude")
+function expectQuantumIdentity(text: string): void {
+  expect(text).toContain('Quantum')
+  expect(text).not.toContain('Claude Code')
+  expect(text).not.toContain('OpenClaude')
+  expect(text).not.toContain("Anthropic's official CLI for Claude")
+}
+
+test('CLI identity prefixes describe Quantum, not Claude Code', () => {
+  expectQuantumIdentity(getCLISyspromptPrefix())
 
   for (const prefix of CLI_SYSPROMPT_PREFIXES) {
-    expect(prefix).toContain('Quantum')
-    expect(prefix).not.toContain('Claude Code')
-    expect(prefix).not.toContain("Anthropic's official CLI for Claude")
+    expectQuantumIdentity(prefix)
   }
 })
 
-test('simple mode identity describes Quantum instead of Claude Code', async () => {
-  process.env.CLAUDE_CODE_SIMPLE = '1'
+test('simple mode identity describes Quantum, not Claude Code', async () => {
+  process.env.QUANTUM_SIMPLE = '1'
 
   const prompt = await getSystemPrompt([], 'gpt-4o')
-
-  expect(prompt[0]).toContain('Quantum')
-  expect(prompt[0]).not.toContain('Claude Code')
-  expect(prompt[0]).not.toContain("Anthropic's official CLI for Claude")
+  expectQuantumIdentity(prompt[0] ?? '')
 })
 
 test('system prompt model identity updates when model changes mid-session', async () => {
-  delete process.env.CLAUDE_CODE_SIMPLE
+  delete process.env.QUANTUM_SIMPLE
   clearSystemPromptSections()
 
   const firstPrompt = await getSystemPrompt([], 'old-test-model')
@@ -64,36 +64,28 @@ test('system prompt model identity updates when model changes mid-session', asyn
   expect(secondText).not.toContain('You are powered by the model old-test-model.')
 })
 
-test('built-in agent prompts describe Quantum instead of Claude Code', () => {
-  expect(DEFAULT_AGENT_PROMPT).toContain('Quantum')
-  expect(DEFAULT_AGENT_PROMPT).not.toContain('Claude Code')
-  expect(DEFAULT_AGENT_PROMPT).not.toContain("Anthropic's official CLI for Claude")
+test('built-in agent prompts describe Quantum, not Claude Code', () => {
+  expectQuantumIdentity(DEFAULT_AGENT_PROMPT)
 
   const generalPrompt = GENERAL_PURPOSE_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(generalPrompt).toContain('Quantum')
-  expect(generalPrompt).not.toContain('Claude Code')
-  expect(generalPrompt).not.toContain("Anthropic's official CLI for Claude")
+  expectQuantumIdentity(generalPrompt)
 
   const explorePrompt = EXPLORE_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(explorePrompt).toContain('Quantum')
-  expect(explorePrompt).not.toContain('Claude Code')
-  expect(explorePrompt).not.toContain("Anthropic's official CLI for Claude")
+  expectQuantumIdentity(explorePrompt)
 
   const planPrompt = PLAN_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(planPrompt).toContain('Quantum')
-  expect(planPrompt).not.toContain('Claude Code')
+  expectQuantumIdentity(planPrompt)
 
   const statuslinePrompt = STATUSLINE_SETUP_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(statuslinePrompt).toContain('Quantum')
-  expect(statuslinePrompt).not.toContain('Claude Code')
+  expectQuantumIdentity(statuslinePrompt)
 
   const guidePrompt = QUANTUM_GUIDE_AGENT.getSystemPrompt({
     toolUseContext: {
@@ -104,9 +96,8 @@ test('built-in agent prompts describe Quantum instead of Claude Code', () => {
       } as never,
     },
   })
-  expect(guidePrompt).toContain('Quantum')
+  expectQuantumIdentity(guidePrompt)
   expect(guidePrompt).toContain('You are the Quantum guide agent.')
   expect(guidePrompt).toContain('**Quantum** (the CLI tool)')
   expect(guidePrompt).not.toContain('You are the Claude guide agent.')
-  expect(guidePrompt).not.toContain('**Claude Code** (the CLI tool)')
 })

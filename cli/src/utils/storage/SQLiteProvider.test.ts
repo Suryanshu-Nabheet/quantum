@@ -13,9 +13,9 @@ import { getProjectsDir } from '../envUtils.js'
 import { sanitizePath } from '../sessionStoragePortable.js'
 
 describe('SQLite Storage Layer', () => {
-  const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
+  const originalConfigDir = process.env.QUANTUM_CONFIG_DIR
   const configDir = mkdtempSync(join(tmpdir(), 'quantum-sqlite-'))
-  process.env.CLAUDE_CONFIG_DIR = configDir
+  process.env.QUANTUM_CONFIG_DIR = configDir
   const cwd = process.cwd()
 
   beforeEach(() => {
@@ -25,9 +25,9 @@ describe('SQLite Storage Layer', () => {
   afterAll(() => {
     resetGlobalGraph()
     if (originalConfigDir === undefined) {
-      delete process.env.CLAUDE_CONFIG_DIR
+      delete process.env.QUANTUM_CONFIG_DIR
     } else {
-      process.env.CLAUDE_CONFIG_DIR = originalConfigDir
+      process.env.QUANTUM_CONFIG_DIR = originalConfigDir
     }
     rmSync(configDir, { recursive: true, force: true })
   })

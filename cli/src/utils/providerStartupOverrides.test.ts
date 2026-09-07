@@ -10,7 +10,7 @@ describe('clearStartupProviderOverrides', () => {
     }) => { env: Record<string, string> }) =>
       updater({
         env: {
-          CLAUDE_CODE_USE_OPENAI: '1',
+          QUANTUM_USE_OPENAI: '1',
           OPENAI_BASE_URL: 'https://api.minimax.io/v1',
           OPENAI_MODEL: 'minimax-m2.7',
           MINIMAX_API_KEY: 'sk-minimax',
@@ -30,7 +30,7 @@ describe('clearStartupProviderOverrides', () => {
       'userSettings',
       expect.objectContaining({
         env: expect.objectContaining({
-          CLAUDE_CODE_USE_OPENAI: undefined,
+          QUANTUM_USE_OPENAI: undefined,
           OPENAI_BASE_URL: undefined,
           OPENAI_MODEL: undefined,
           MINIMAX_API_KEY: undefined,

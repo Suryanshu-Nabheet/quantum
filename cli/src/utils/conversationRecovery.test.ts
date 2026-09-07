@@ -4,22 +4,22 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 const tempDirs: string[] = []
-const originalSimple = process.env.CLAUDE_CODE_SIMPLE
+const originalSimple = process.env.QUANTUM_SIMPLE
 const providerEnvKeys = [
-  'CLAUDE_CODE_USE_GEMINI',
-  'CLAUDE_CODE_USE_MISTRAL',
-  'CLAUDE_CODE_USE_GITHUB',
-  'CLAUDE_CODE_USE_BEDROCK',
-  'CLAUDE_CODE_USE_VERTEX',
-  'CLAUDE_CODE_USE_OPENAI',
-  'CLAUDE_CODE_USE_FOUNDRY',
+  'QUANTUM_USE_GEMINI',
+  'QUANTUM_USE_MISTRAL',
+  'QUANTUM_USE_GITHUB',
+  'QUANTUM_USE_BEDROCK',
+  'QUANTUM_USE_VERTEX',
+  'QUANTUM_USE_OPENAI',
+  'QUANTUM_USE_FOUNDRY',
   'OPENAI_MODEL',
   'OPENAI_BASE_URL',
   'OPENAI_API_BASE',
   'NVIDIA_NIM',
   'MINIMAX_API_KEY',
   'XAI_API_KEY',
-  'CLAUDE_CODE_PROVIDER_PROFILE_ENV_APPLIED',
+  'QUANTUM_PROVIDER_PROFILE_ENV_APPLIED',
 ] as const
 const originalProviderEnv = Object.fromEntries(
   providerEnvKeys.map(key => [key, process.env[key]]),
@@ -61,7 +61,7 @@ async function writeJsonl(entry: unknown): Promise<string> {
 
 afterEach(async () => {
   mock.restore()
-  process.env.CLAUDE_CODE_SIMPLE = originalSimple
+  process.env.QUANTUM_SIMPLE = originalSimple
   for (const key of providerEnvKeys) {
     const value = originalProviderEnv[key]
     if (value === undefined) {
@@ -77,11 +77,11 @@ async function importFreshConversationRecovery() {
   mock.restore()
   mock.module('./model/providers.js', () => ({
     getAPIProvider: () => {
-      if (process.env.CLAUDE_CODE_USE_GITHUB) return 'github'
-      if (process.env.CLAUDE_CODE_USE_OPENAI) return 'openai'
-      if (process.env.CLAUDE_CODE_USE_BEDROCK) return 'bedrock'
-      if (process.env.CLAUDE_CODE_USE_VERTEX) return 'vertex'
-      if (process.env.CLAUDE_CODE_USE_FOUNDRY) return 'foundry'
+      if (process.env.QUANTUM_USE_GITHUB) return 'github'
+      if (process.env.QUANTUM_USE_OPENAI) return 'openai'
+      if (process.env.QUANTUM_USE_BEDROCK) return 'bedrock'
+      if (process.env.QUANTUM_USE_VERTEX) return 'vertex'
+      if (process.env.QUANTUM_USE_FOUNDRY) return 'foundry'
       return 'firstParty'
     },
   }))
@@ -96,7 +96,7 @@ function clearProviderEnv(): void {
 }
 
 test('loadConversationForResume accepts a small transcript from jsonl path', async () => {
-  process.env.CLAUDE_CODE_SIMPLE = '1'
+  process.env.QUANTUM_SIMPLE = '1'
   const path = await writeJsonl(user(id(1), 'hello'))
   const { loadConversationForResume } = await importFreshConversationRecovery()
 
@@ -107,7 +107,7 @@ test('loadConversationForResume accepts a small transcript from jsonl path', asy
 })
 
 test('loadConversationForResume rejects oversized reconstructed transcripts', async () => {
-  process.env.CLAUDE_CODE_SIMPLE = '1'
+  process.env.QUANTUM_SIMPLE = '1'
   const hugeContent = 'x'.repeat(8 * 1024 * 1024 + 32 * 1024)
   const path = await writeJsonl(user(id(2), hugeContent))
   const {
@@ -130,7 +130,7 @@ test('loadConversationForResume rejects oversized reconstructed transcripts', as
 
 test('deserializeMessages preserves thinking blocks for GitHub native Claude transport', async () => {
   clearProviderEnv()
-  process.env.CLAUDE_CODE_USE_GITHUB = '1'
+  process.env.QUANTUM_USE_GITHUB = '1'
   process.env.OPENAI_MODEL = 'claude-sonnet-4-6'
   const { deserializeMessages } = await importFreshConversationRecovery()
 

@@ -71,21 +71,21 @@ function installCommonMocks(options?: {
     CONSOLE_OAUTH_SCOPES: ['org:create_api_key', 'user:profile'],
     CLAUDE_AI_OAUTH_SCOPES: ['user:profile', 'user:inference'],
     ALL_OAUTH_SCOPES: ['org:create_api_key', 'user:profile', 'user:inference'],
-    MCP_CLIENT_METADATA_URL: 'https://claude.ai/oauth/claude-code-client-metadata',
+    MCP_CLIENT_METADATA_URL: 'https://github.com/Suryanshu-Nabheet/Quantum/oauth/claude-code-client-metadata',
     getOauthConfig: () => ({
       BASE_API_URL: 'https://api.anthropic.com',
-      CONSOLE_AUTHORIZE_URL: 'https://platform.claude.com/oauth/authorize',
-      CLAUDE_AI_AUTHORIZE_URL: 'https://claude.com/cai/oauth/authorize',
-      CLAUDE_AI_ORIGIN: 'https://claude.ai',
+      CONSOLE_AUTHORIZE_URL: '/authorize',
+      CLAUDE_AI_AUTHORIZE_URL: '/authorize',
+      CLAUDE_AI_ORIGIN: 'https://github.com/Suryanshu-Nabheet/Quantum',
       TOKEN_URL: 'https://platform.claude.com/v1/oauth/token',
-      API_KEY_URL: 'https://api.anthropic.com/api/oauth/claude_cli/create_api_key',
-      ROLES_URL: 'https://api.anthropic.com/api/oauth/claude_cli/roles',
-      CONSOLE_SUCCESS_URL: 'https://platform.claude.com/oauth/code/success',
-      CLAUDEAI_SUCCESS_URL: 'https://platform.claude.com/oauth/code/success',
-      MANUAL_REDIRECT_URL: 'https://platform.claude.com/oauth/code/callback',
+      API_KEY_URL: 'claude_cli/create_api_key',
+      ROLES_URL: 'claude_cli/roles',
+      CONSOLE_SUCCESS_URL: '/code/success',
+      CLAUDEAI_SUCCESS_URL: '/code/success',
+      MANUAL_REDIRECT_URL: '/code/callback',
       CLIENT_ID: 'test-client-id',
       OAUTH_FILE_SUFFIX: '',
-      MCP_PROXY_URL: 'https://mcp-proxy.anthropic.com',
+      MCP_PROXY_URL: '',
       MCP_PROXY_PATH: '/v1/mcp/{server_id}',
     }),
   }))
@@ -123,14 +123,14 @@ function installCommonMocks(options?: {
     isCustomApiKeyApproved: () => false,
     removeApiKey: async () => {},
     saveOAuthTokensIfNeeded: () => ({ didSave: false }),
-    getClaudeAIOAuthTokens: () =>
+    getQuantumOAuthTokens: () =>
       options?.oauthToken ? { accessToken: options.oauthToken } : null,
     clearOAuthTokenCache: () => {},
     handleOAuth401Error: async () => {},
-    getClaudeAIOAuthTokensAsync: async () =>
+    getQuantumOAuthTokensAsync: async () =>
       options?.oauthToken ? { accessToken: options.oauthToken } : null,
     checkAndRefreshOAuthTokenIfNeeded: async () => null,
-    isClaudeAISubscriber: () => Boolean(options?.oauthToken),
+    isQuantumSubscriber: () => Boolean(options?.oauthToken),
     hasProfileScope: () => options?.hasProfileScope ?? false,
     is1PApiCustomer: () => Boolean(options?.apiKey),
     getOauthAccountInfo: () => undefined,
@@ -173,13 +173,13 @@ async function prepareFastModeTestState(): Promise<void> {
 }
 
 function forceFirstPartyProviderEnv(): void {
-  delete process.env.CLAUDE_CODE_USE_OPENAI
-  delete process.env.CLAUDE_CODE_USE_GITHUB
-  delete process.env.CLAUDE_CODE_USE_GEMINI
-  delete process.env.CLAUDE_CODE_USE_BEDROCK
-  delete process.env.CLAUDE_CODE_USE_VERTEX
-  delete process.env.CLAUDE_CODE_USE_FOUNDRY
-  delete process.env.CLAUDE_CODE_USE_MISTRAL
+  delete process.env.QUANTUM_USE_OPENAI
+  delete process.env.QUANTUM_USE_GITHUB
+  delete process.env.QUANTUM_USE_GEMINI
+  delete process.env.QUANTUM_USE_BEDROCK
+  delete process.env.QUANTUM_USE_VERTEX
+  delete process.env.QUANTUM_USE_FOUNDRY
+  delete process.env.QUANTUM_USE_MISTRAL
   delete process.env.NVIDIA_NIM
   delete process.env.MINIMAX_API_KEY
   delete process.env.XAI_API_KEY

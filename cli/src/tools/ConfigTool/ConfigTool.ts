@@ -242,7 +242,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error: !isAnthropicAuthEnabled()
-              ? 'Voice mode requires a Claude.ai account. Please run /login to sign in.'
+              ? 'Voice mode is not available in Quantum CLI.'
               : 'Voice mode is not available.',
           },
         }
@@ -272,7 +272,7 @@ export const ConfigTool = buildTool({
           data: {
             success: false,
             error:
-              'Voice mode requires a Claude.ai account. Please run /login to sign in.',
+              'Voice mode is not available in Quantum CLI.',
           },
         }
       }
